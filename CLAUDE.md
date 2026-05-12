@@ -113,12 +113,16 @@ Don't over-build this; it works.
 
 ---
 
-## Open questions for Cami (answer when you wake up — none of these block Feature 1)
-1. **Translation provider for Feature 2** — Anthropic (recommended, you already use Claude), DeepL, or Google? And do you have/will you add the API key to Vercel?
-2. **Instagram handle** for the Apify pull, and do you have an `APIFY_TOKEN`? (You use Apify in the Editor Hub project — same token works.)
-3. **Gemini key** — do you have a Google AI Studio / `GOOGLE_API_KEY`? Budget ceiling for video analysis (it can add up)?
-4. Should the AI features write straight into the **Ideas bank** (suggested follow-ups, repurpose ideas appear as new idea chips), or land in a separate "AI suggestions" holding area you approve from? (Recommend: separate holding area, you promote the good ones.)
-5. Spanish for the editors — auto-translate on a global `EN|ES` toggle (recommended), or show ES underneath every EN idea always?
+## Decisions (locked 2026-05-11)
+- **Feature 2 — Spanish:** global `EN | ES` toggle near the top; ES mode renders the Spanish version of every idea/slot (auto-translating EN ones, leaving already-Spanish ones alone), cached on the idea object as `es`. Remember the choice in `localStorage` (`ui_lang`).
+- **Feature 2 — translation provider:** **parked** for now — Cami will decide the provider/key later. Build the rest of #2's UI (toggle, language detection, cached `es` field, "already Spanish ⇒ es = text") so it works for the already-Spanish ideas immediately; the auto-translate of English ideas stays dormant until a key is added (mirror how Supabase degrades gracefully).
+- **Feature 3 — Instagram handle:** `camiinthisthang`. Still need `APIFY_TOKEN` from Cami (the paste of it on 2026-05-11 got garbled — re-ask). Gemini: needs a `GOOGLE_API_KEY` from Google **AI Studio** (https://aistudio.google.com/apikey, not the gemini.google.com chat app) and a monthly budget ceiling — TBD.
+- **Feature 3 — where AI suggestions land:** a **separate "review" area** (e.g. a "Suggestions" panel under the Performance tab). Cami approves items there; approving a follow-up/repurpose idea promotes it into the Ideas bank. Do **not** write AI output straight into the bank.
+
+## Still open
+- `APIFY_TOKEN` (re-ask Cami — last paste was mangled)
+- `GOOGLE_API_KEY` for Gemini + a monthly spend ceiling for video analysis
+- Translation provider + key for Feature 2 (Cami parked it)
 
 ## Required env vars (set in Vercel → Settings → Environment Variables)
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY` — already set ✅
