@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cami Padel — Content Strategy</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg2: #f9f8f6;
+  --bg3: #f0ede9;
+  --text: #111111;
+  --text2: #444444;
+  --text3: #888888;
+  --border: #e5e2dd;
+  --border2: #ccc;
+  --r: 10px;
+  --rs: 7px;
+
+  /* pillar colors — matched to screenshot */
+  --j:  #b8a100; --j-bg:  #fefce8; --j-mid: #fde047; --j-text: #5a3000;
+  --pc: #c4345e; --pc-bg: #fdf2f5; --pc-mid: #f9a8c9; --pc-text: #6b0f2e;
+  --ae: #199e94; --ae-bg: #f0fdfb; --ae-mid: #5eead4; --ae-text: #0d3d38;
+  --gl: #7c4fd4; --gl-bg: #faf5ff; --gl-mid: #c4b5fd; --gl-text: #3b1278;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* header */
+.top-bar { padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+.top-bar h1 { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
+.top-bar p { font-size: 12px; color: var(--text3); }
+
+/* nav */
+.nav { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 9px 1.5rem; margin: 0 -1.5rem 0; display: flex; gap: 6px; flex-wrap: wrap; z-index: 100; }
+.np { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; color: var(--text2); text-decoration: none; border: 1px solid var(--border); background: var(--bg2); }
+.np:hover { background: var(--bg3); color: var(--text); }
+
+/* sections */
+section { margin-bottom: 3.5rem; scroll-margin-top: 52px; }
+.sec-label { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 14px; letter-spacing: .04em; text-transform: uppercase; }
+
+/* cards */
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: .9rem 1.1rem; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.gf { display: flex; gap: 10px; }
+.gf > .card { flex: 1; }
+
+/* tiny labels */
+.tag { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; margin: 2px 2px 0 0; }
+.tag-j  { background: var(--j-mid);  color: var(--j-text); }
+.tag-pc { background: var(--pc-mid); color: var(--pc-text); }
+.tag-ae { background: var(--ae-mid); color: var(--ae-text); }
+.tag-gl { background: var(--gl-mid); color: var(--gl-text); }
+.tag-ig { background: #fce7f3; color: #9d174d; }
+.tag-yt { background: #fef3c7; color: #92400e; }
+.tag-grey { background: var(--bg3); color: var(--text2); }
+
+/* pillar cards */
+.pillar { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.pillar-head { padding: .75rem 1rem; border-bottom: 1px solid var(--border); }
+.pillar-name { font-size: 13px; font-weight: 600; margin-bottom: 1px; }
+.pillar-role { font-size: 11px; font-weight: 500; opacity: .65; }
+.pillar-body { padding: .75rem 1rem; }
+.pillar-body h5 { font-size: 10px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .04em; margin: 10px 0 5px; }
+.pillar-body h5:first-child { margin-top: 0; }
+.item-list { list-style: none; }
+.item-list li { font-size: 12px; color: var(--text); padding: 2px 0; padding-left: 12px; position: relative; }
+.item-list li::before { content: '·'; position: absolute; left: 2px; color: var(--text2); }
+.hook-quote { font-size: 12px; font-style: italic; color: var(--text); padding: 4px 8px; border-left: 2px solid var(--border2); margin: 3px 0; line-height: 1.5; }
+.j-card  { border-left: 3px solid var(--j); }  .j-head  { background: var(--j-bg); }
+.pc-card { border-left: 3px solid var(--pc); } .pc-head { background: var(--pc-bg); }
+.ae-card { border-left: 3px solid var(--ae); } .ae-head { background: var(--ae-bg); }
+.gl-card { border-left: 3px solid var(--gl); } .gl-head { background: var(--gl-bg); }
+
+/* weekly grid */
+.week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.day-col { }
+.day-head { font-size: 11px; font-weight: 600; color: var(--text); padding: 5px 4px 7px; border-bottom: 1px solid var(--border); margin-bottom: 7px; text-align: center; }
+.slot { border-radius: 6px; padding: 7px 8px; margin-bottom: 6px; font-size: 11px; }
+.slot .sf { font-weight: 600; display: block; }
+.slot .sh { color: inherit; opacity: .75; font-size: 10px; }
+.slot-j  { background: var(--j-bg);  color: var(--j-text); }
+.slot-pc { background: var(--pc-bg); color: var(--pc-text); }
+.slot-ae { background: var(--ae-bg); color: var(--ae-text); }
+.slot-gl { background: var(--gl-bg); color: var(--gl-text); }
+.slot-ig { background: #fdf4f8; color: #9d174d; }
+.slot-gr { background: var(--bg2); color: var(--text2); }
+.day-note { font-size: 10px; color: var(--text3); text-align: center; margin-top: 4px; }
+
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--text2); margin-top: 12px; }
+.ldot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+/* multiplication */
+.split { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 12px; }
+.split-bad { background: #fef2f2; padding: 1rem; }
+.split-good { background: #f0fdf4; padding: 1rem; border-left: 1px solid var(--border); }
+.split-label { font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.icon-x { width: 16px; height: 16px; border-radius: 50%; background: #ef4444; color: #fff; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.icon-ok { width: 16px; height: 16px; border-radius: 50%; background: #22c55e; color: #fff; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.bad-quote { background: #fff; border: 1px solid #fecaca; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #7f1d1d; font-style: italic; margin-top: 8px; line-height: 1.5; }
+.good-items { font-size: 12px; color: #14532d; line-height: 1.85; }
+.fmt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.fmt-card { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.fmt-head { padding: 8px 12px; font-size: 12px; font-weight: 600; border-bottom: 1px solid var(--border); }
+.fmt-head-j  { background: var(--j-bg);  color: var(--j-text); }
+.fmt-head-ae { background: var(--ae-bg); color: var(--ae-text); }
+.fmt-item { padding: 7px 12px; font-size: 12px; color: var(--text2); border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+.fmt-item:last-child { border-bottom: none; }
+.fmt-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.recycle-tip { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: .85rem 1rem; font-size: 12px; color: var(--text); line-height: 1.6; }
+.recycle-tip strong { color: var(--text); }
+
+/* phase plan */
+.tl-row { display: flex; align-items: center; gap: 4px; margin-bottom: 1.25rem; }
+.tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.tl-line { flex: 1; height: 1px; background: var(--border); }
+.ci { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.ci:last-child { border-bottom: none; }
+
+/* ===== PLANNER ===== */
+.planner-top { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.week-nav { display: flex; align-items: center; gap: 6px; }
+.week-nav button { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; cursor: pointer; color: var(--text2); font-size: 13px; font-family: inherit; }
+.week-nav button:hover { background: var(--bg3); }
+#week-label { font-size: 13px; font-weight: 500; min-width: 150px; text-align: center; }
+.trip-badge { display: none; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--ae-bg); color: var(--ae-text); border: 1px solid var(--ae-mid); }
+
+.pgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 1.5rem; }
+.pday-head { padding: 5px 4px 7px; border-bottom: 1px solid var(--border); margin-bottom: 7px; text-align: center; }
+.pday-head .dn { font-size: 11px; font-weight: 600; color: var(--text); display: block; }
+.pday-head .dd { font-size: 10px; color: var(--text3); display: block; }
+.pslot { border-radius: 6px; padding: 7px 8px; margin-bottom: 7px; }
+.pslot.s-j  { background: var(--j-bg); }
+.pslot.s-pc { background: var(--pc-bg); }
+.pslot.s-ae { background: var(--ae-bg); }
+.pslot.s-gl { background: var(--gl-bg); }
+.pslot.s-ig { background: #fdf4f8; }
+.pslot.s-gr { background: var(--bg2); }
+.pslot-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.pslot-fmt { font-size: 10px; font-weight: 600; }
+.s-j  .pslot-fmt { color: var(--j-text); }
+.s-pc .pslot-fmt { color: var(--pc-text); }
+.s-ae .pslot-fmt { color: var(--ae-text); }
+.s-gl .pslot-fmt { color: var(--gl-text); }
+.s-ig .pslot-fmt { color: #9d174d; }
+.s-gr .pslot-fmt { color: var(--text2); }
+.pslot-hook { font-size: 9px; color: var(--text3); }
+.pslot textarea { width: 100%; border: 1px solid transparent; background: rgba(255,255,255,0.6); border-radius: 4px; font-size: 11px; font-family: inherit; resize: none; padding: 4px 6px; color: var(--text); line-height: 1.4; min-height: 38px; outline: none; }
+.pslot textarea:focus { background: #fff; border-color: var(--border2); }
+.pslot textarea::placeholder { color: var(--text3); font-style: italic; }
+
+/* ideas */
+.ideas-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.ideas-row input { flex: 1; padding: 7px 11px; border: 1px solid var(--border2); border-radius: 7px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--bg2); outline: none; }
+.ideas-row input:focus { border-color: #999; background: #fff; }
+.btn { padding: 7px 14px; border-radius: 7px; border: 1px solid var(--border2); background: var(--bg2); color: var(--text2); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.btn:hover { background: var(--bg3); color: var(--text); }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.ideas-list { display: flex; flex-wrap: wrap; gap: 7px; min-height: 20px; }
+.idea-chip { display: flex; align-items: center; gap: 7px; background: var(--bg2); border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: 12px; }
+.idea-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 15px; padding: 0; line-height: 1; }
+.idea-del:hover { color: var(--text); }
+.empty-msg { font-size: 12px; color: var(--text3); font-style: italic; }
+
+/* asia callout */
+.callout { background: var(--ae-bg); border: 1px solid var(--ae-mid); border-radius: var(--r); padding: .9rem 1.1rem; margin-bottom: 1.25rem; }
+.callout h3 { font-size: 13px; font-weight: 600; color: var(--ae-text); margin-bottom: 5px; }
+.callout p { font-size: 12px; color: var(--ae-text); opacity: .8; line-height: 1.6; }
+.loc { display: inline-block; margin: 3px 4px 0 0; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--ae-mid); color: var(--ae-text); }
+
+/* platform cards */
+.platform-card { border: 1px solid var(--border); border-radius: var(--r); padding: .9rem 1.1rem; }
+.pt-ig { border-left: 3px solid #e05585; }
+.pt-yt { border-left: 3px solid #dc2626; }
+
+/* ===== VIEW TOGGLE ===== */
+.view-toggle { display:flex;gap:3px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:3px; }
+.vt-btn { padding:4px 18px;border-radius:6px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:background .1s; }
+.vt-btn.active { background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.09); }
+
+/* ===== DRAG ===== */
+.idea-chip { cursor:grab; user-select:none; }
+.idea-chip.dragging { opacity:.5;cursor:grabbing; }
+.pslot.drag-over { outline:2px dashed var(--ae);outline-offset:0;background:var(--ae-bg) !important; }
+
+/* ===== MONTH CALENDAR ===== */
+.mcal { width:100%;border-collapse:separate;border-spacing:3px; }
+.mcal th { font-size:11px;font-weight:600;color:var(--text2);text-align:center;padding:4px 2px 9px; }
+.mcal td { vertical-align:top;width:14.28%; }
+.mday { min-height:130px;border:1px solid var(--border);border-radius:7px;padding:5px 6px;position:relative; }
+.mday:not(.no-post):not(.out-month):hover { border-color:var(--border2); }
+.mday-slot { border-radius:4px;padding:2px 3px;margin-bottom:3px;transition:background .1s; }
+.mday-slot.drag-over { outline:1px dashed var(--ae);background:var(--ae-bg);border-radius:4px; }
+.mday.out-month { background:var(--bg2);opacity:.3;pointer-events:none; }
+.mday.no-post { background:var(--bg2); }
+.mday.is-today { border-color:var(--ae) !important; }
+.mday-num { font-size:11px;font-weight:600;color:var(--text2);display:block;margin-bottom:3px; }
+.mday.is-today .mday-num { color:var(--ae-text); }
+.mday-pill { font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;display:inline-block;margin-bottom:4px;letter-spacing:.02em; }
+.mday-ta { width:100%;border:none;background:transparent;font-size:10px;font-family:inherit;color:var(--text);resize:none;outline:none;line-height:1.45;padding:0;min-height:26px; }
+.mday-ta::placeholder { color:var(--text3);font-style:italic; }
+.mnav { display:flex;align-items:center;gap:6px; }
+.mnav button { background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--text2);font-size:13px;font-family:inherit; }
+.mnav button:hover { background:var(--bg3); }
+#month-label { font-size:13px;font-weight:500;min-width:140px;text-align:center; }
+
+/* script button */
+.script-btn { background:none;border:none;cursor:pointer;font-size:11px;padding:1px 3px;color:var(--text3);line-height:1;border-radius:3px;flex-shrink:0;transition:color .1s; }
+.script-btn:hover { color:var(--ae-text);background:var(--ae-bg); }
+.script-btn.has-script { color:var(--ae-text); }
+
+/* script modal */
+.modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:1000;align-items:center;justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:#fff;border-radius:14px;width:min(680px,95vw);max-height:90vh;display:flex;flex-direction:column;box-shadow:0 12px 48px rgba(0,0,0,.2); }
+.modal-head { padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px; }
+.modal-pill { font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;white-space:nowrap; }
+.modal-title { font-size:13px;font-weight:600;flex:1;color:var(--text2); }
+.modal-close { background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:0 2px;line-height:1; }
+.modal-close:hover { color:var(--text); }
+.modal-body { padding:1.1rem 1.25rem;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;min-height:0; }
+.mlabel { font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;display:block; }
+.modal-idea { font-size:13px;font-weight:500;color:var(--text);padding:9px 11px;background:var(--bg2);border-radius:8px;border:1px solid var(--border);line-height:1.5;min-height:36px; }
+.modal-script { width:100%;min-height:280px;border:1px solid var(--border);border-radius:9px;padding:11px 13px;font-size:13px;font-family:inherit;color:var(--text);resize:vertical;outline:none;line-height:1.7; }
+.modal-script:focus { border-color:var(--border2); }
+.modal-foot { padding:.8rem 1.25rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center; }
+.modal-hint { font-size:11px;color:var(--text3);font-style:italic; }
+
+/* data/backup bar */
+.data-bar { display:flex;align-items:center;gap:8px;padding:.55rem .9rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1.25rem; }
+.data-bar-info { flex:1;font-size:11px;color:var(--text2);line-height:1.4; }
+.data-bar-info strong { color:var(--text);display:block;margin-bottom:1px; }
+
+/* supabase status */
+.db-badge { display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500; }
+.db-local { background:#fef3c7;color:#92400e; }
+.db-live { background:#d1fae5;color:#065f46; }
+.db-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+.db-local .db-dot { background:#f59e0b; }
+.db-live .db-dot { background:#10b981; }
+</style>
+<script>
+// ── Runtime config ───────────────────────────────────────────────────────────
+// These two placeholders are replaced at build time by build.js using the
+// SUPABASE_URL / SUPABASE_ANON_KEY environment variables (see README).
+// If they are left untouched (e.g. opening this file directly), the app runs
+// in localStorage-only mode — nothing breaks, it just won't sync.
+window.__ENV__ = {
+  SUPABASE_URL: "__SUPABASE_URL__",
+  SUPABASE_ANON_KEY: "__SUPABASE_ANON_KEY__"
+};
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top-bar">
+  <h1>Cami Padel — Content Strategy</h1>
+  <p>May – September 2026 · Instagram + YouTube · Advanced posting schedule</p>
+</div>
+
+<nav class="nav">
+  <a href="#identity" class="np">Identity</a>
+  <a href="#pillars" class="np">Pillars</a>
+  <a href="#multiply" class="np">Content multiplication</a>
+  <a href="#schedule" class="np">Weekly schedule</a>
+  <a href="#planner" class="np">Planner</a>
+  <a href="#plan" class="np">Phase plan</a>
+</nav>
+
+<!-- IDENTITY -->
+<section id="identity">
+  <p class="sec-label">Channel identity</p>
+  <p style="font-size:19px;font-weight:500;line-height:1.4;font-style:italic;margin-bottom:1.5rem;">"I spent a decade building other people's dreams in tech. Now I'm building my own."</p>
+
+  <p class="sec-label" style="margin-top:1.5rem;">Platforms</p>
+  <div class="g2" style="margin-bottom:10px;">
+    <div class="platform-card pt-ig">
+      <p style="font-size:13px;font-weight:600;margin-bottom:3px;">Instagram</p>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:8px;">Primary · already live</p>
+      <span class="tag tag-ig">storytelling</span><span class="tag tag-ig">brand deals</span><span class="tag tag-ig">growth</span>
+    </div>
+    <div class="platform-card pt-yt">
+      <p style="font-size:13px;font-weight:600;margin-bottom:3px;">YouTube</p>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:8px;">Launch late June / July 2026</p>
+      <span class="tag tag-yt">ad revenue</span><span class="tag tag-yt">long-form</span><span class="tag tag-yt">evergreen</span>
+    </div>
+  </div>
+  <div class="card" style="padding:.7rem 1rem;border-left:3px solid var(--gl);max-width:360px;">
+    <p style="font-size:11px;font-weight:600;margin-bottom:2px;">TikTok · Launching now · 0 followers</p>
+    <p style="font-size:11px;color:var(--text2);">New account — repurpose Reels · build from zero · distribution</p>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="pillars">
+  <p class="sec-label">The 4 content pillars</p>
+  <div class="g4">
+
+    <!-- 1. JOURNEY -->
+    <div class="pillar j-card">
+      <div class="pillar-head j-head">
+        <p class="pillar-name" style="color:var(--j-text);">The Journey</p>
+        <p class="pillar-role" style="color:var(--j-text);">El foco central · emocional / inspiracional / humano</p>
+      </div>
+      <div class="pillar-body">
+        <h5>Aquí entra</h5>
+        <ul class="item-list">
+          <li>Dejar la vida atrás</li>
+          <li>Intentar algo difícil</li>
+          <li>Proceso real · dudas · evolución</li>
+          <li>Vulnerabilidad · disciplina</li>
+          <li>Mini victorias · frustraciones</li>
+          <li>"Trying to go pro"</li>
+        </ul>
+        <h5>Tipos de videos</h5>
+        <ul class="item-list">
+          <li>Road to first tournament</li>
+          <li>Pensamientos post entreno</li>
+          <li>Días malos · progreso real</li>
+          <li>Antes vs. ahora</li>
+          <li>Adaptation in Medellín</li>
+          <li>Volver a Madrid</li>
+          <li>Miedo · cansancio · identidad</li>
+        </ul>
+        <h5>Hooks típicos</h5>
+        <div class="hook-quote">"Aveces siento que estoy muy vieja para esto"</div>
+        <div class="hook-quote">"Hay días donde quiero rendirme"</div>
+        <div class="hook-quote">"Dejé una vida estable por esto"</div>
+        <div class="hook-quote">"Nadie habla de esta parte"</div>
+        <div class="hook-quote">"Trying to become a pro athlete at 20-something…"</div>
+      </div>
+    </div>
+
+    <!-- 2. PADEL CULTURE -->
+    <div class="pillar pc-card">
+      <div class="pillar-head pc-head">
+        <p class="pillar-name" style="color:var(--pc-text);">Padel Culture</p>
+        <p class="pillar-role" style="color:var(--pc-text);">Viralidad · humor + relatable + niche</p>
+      </div>
+      <div class="pillar-body">
+        <h5>Aquí entra</h5>
+        <ul class="item-list">
+          <li>Ex tenistas · tipos de jugadores</li>
+          <li>Edades del pádel · gente intensa</li>
+          <li>Frases típicas · coaches</li>
+          <li>Ranking obsession</li>
+          <li>Mixed matches · social dynamics</li>
+          <li>Outfit girls · gente que canta "mía"</li>
+          <li>Partidos tóxicos · paddle couples</li>
+          <li>Warmups raros</li>
+        </ul>
+        <h5>Hooks típicos</h5>
+        <div class="hook-quote">"POV: aceptaste jugar con ex tenistas"</div>
+        <div class="hook-quote">"Tipos de personas en un club de pádel"</div>
+        <div class="hook-quote">"El pádel es literalmente terapia grupal"</div>
+        <div class="hook-quote">"Cómo se siente jugar contra señores de 58"</div>
+        <div class="hook-quote">"Las girls del pádel entenderán esto"</div>
+      </div>
+    </div>
+
+    <!-- 3. ATHLETE ERA -->
+    <div class="pillar ae-card">
+      <div class="pillar-head ae-head">
+        <p class="pillar-name" style="color:var(--ae-text);">Athlete Era</p>
+        <p class="pillar-role" style="color:var(--ae-text);">Aspiracional · entreno / rutina / performance / lifestyle</p>
+      </div>
+      <div class="pillar-body">
+        <h5>Aquí entra</h5>
+        <ul class="item-list">
+          <li>WHOOP · recovery · gym</li>
+          <li>Rutina · alimentación · preparación</li>
+          <li>Movilidad · outfit training</li>
+          <li>Hábitos · athlete aesthetic</li>
+        </ul>
+        <h5>Tipos de videos</h5>
+        <ul class="item-list">
+          <li>Morning routines · train with me</li>
+          <li>Stats · sleep score · exhaustion</li>
+          <li>Meal prep · healthy routines</li>
+          <li>Stretching · tournament prep</li>
+          <li>What I eat · athlete lifestyle</li>
+        </ul>
+        <h5>Hooks</h5>
+        <div class="hook-quote">"What trying to become a pro actually looks like"</div>
+        <div class="hook-quote">"Mi WHOOP ya está preocupado por mí"</div>
+        <div class="hook-quote">"Así se ve una semana entrenando"</div>
+        <div class="hook-quote">"Nobody talks about recovery enough"</div>
+        <div class="hook-quote">"Athlete life is not aesthetic all the time"</div>
+      </div>
+    </div>
+
+    <!-- 4. GIRLIE LIFESTYLE -->
+    <div class="pillar gl-card">
+      <div class="pillar-head gl-head">
+        <p class="pillar-name" style="color:var(--gl-text);">Girlie Lifestyle</p>
+        <p class="pillar-role" style="color:var(--gl-text);">Personalidad</p>
+      </div>
+      <div class="pillar-body">
+        <h5>Aquí entra</h5>
+        <ul class="item-list">
+          <li>Outfits · skincare · cute routines</li>
+          <li>"Being a girl while training"</li>
+          <li>Match outfits · nails · coffee</li>
+          <li>Medellín lifestyle · travel</li>
+          <li>Aesthetic moments · music</li>
+          <li>Girl talk</li>
+        </ul>
+        <h5>Hooks</h5>
+        <div class="hook-quote">"Being a girl athlete is expensive"</div>
+        <div class="hook-quote">"Padel outfit check"</div>
+        <div class="hook-quote">"Trying to look cute after 3 hours training"</div>
+        <div class="hook-quote">"Las verdaderas atletas saben esto…"</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTENT MULTIPLICATION -->
+<section id="multiply">
+  <p class="sec-label">Content multiplication · change the format, not the message</p>
+  <div class="split">
+    <div class="split-bad">
+      <div class="split-label"><span class="icon-x">✕</span> Bad strategy</div>
+      <p style="font-size:13px;color:#991b1b;line-height:1.5;">You post once and never touch the topic again.</p>
+      <div class="bad-quote">"I made a reel about X. It performed well. I never spoke about it again."</div>
+    </div>
+    <div class="split-good">
+      <div class="split-label"><span class="icon-ok">✓</span> Good strategy</div>
+      <p style="font-size:13px;color:#14532d;line-height:1.5;">That reel worked — now multiply it into 5 formats.</p>
+      <div class="good-items" style="margin-top:8px;">
+        → Carousel<br>
+        → Split screen (before/after)<br>
+        → Ranking countdown<br>
+        → Rating 1–10<br>
+        → Repost the original in 45 days
+      </div>
+      <p style="font-size:11px;color:#166534;margin-top:8px;font-style:italic;">One idea. Five pieces. Done with AI in under 5 min per format.</p>
+    </div>
+  </div>
+  <div class="fmt-grid">
+    <div class="fmt-card">
+      <div class="fmt-head fmt-head-j">Reel formats</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--j);"></div>Split screen — before vs. after (technique, lifestyle, results)</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--j);"></div>Rating 1–10 — score your shots, gear, or training days</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--j);"></div>Ranking countdown — top 3 mistakes, best shots, moments</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--j);"></div>Step-by-step tutorial — talking to camera, one concept</div>
+    </div>
+    <div class="fmt-card">
+      <div class="fmt-head fmt-head-ae">Carousel formats</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--ae);"></div>Problem → solution → transformation (3-act)</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--ae);"></div>"X things nobody tells you about..." (high saves)</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--ae);"></div>Comparison — what most players do vs. what actually works</div>
+      <div class="fmt-item"><div class="fmt-dot" style="background:var(--ae);"></div>Myths vs. reality — each slide busts one assumption</div>
+    </div>
+  </div>
+  <div class="recycle-tip">
+    <strong>Recycling rule:</strong> When a post outperforms your average, flag it. Within 2 weeks pick 2 formats above and remake it. Schedule the original repost 45 days out. One strong idea should produce at least 3 pieces — most creators leave this completely on the table.
+  </div>
+</section>
+
+<!-- WEEKLY SCHEDULE -->
+<section id="schedule">
+  <p class="sec-label">Weekly schedule · advanced · 6 active days</p>
+  <div class="week-grid">
+    <div class="day-col">
+      <div class="day-head">Mon</div>
+      <div class="slot slot-j"><span class="sf">Reel</span><span class="sh">The Journey</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">BTS</span></div>
+      <p class="day-note">Emotional anchor</p>
+    </div>
+    <div class="day-col">
+      <div class="day-head">Tue</div>
+      <div class="slot slot-pc"><span class="sf">Reel</span><span class="sh">Padel Culture</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">Humor BTS</span></div>
+      <p class="day-note">Viral / niche</p>
+    </div>
+    <div class="day-col">
+      <div class="day-head">Wed</div>
+      <div class="slot slot-gr"><span class="sf">Carousel</span><span class="sh">Tips / saves</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">Mid-week</span></div>
+      <p class="day-note">Saves / shareable</p>
+    </div>
+    <div class="day-col">
+      <div class="day-head">Thu</div>
+      <div class="slot slot-ae"><span class="sf">Reel</span><span class="sh">Athlete Era</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">Training BTS</span></div>
+      <p class="day-note">Aspirational</p>
+    </div>
+    <div class="day-col">
+      <div class="day-head">Fri</div>
+      <div class="slot slot-gl"><span class="sf">Carousel</span><span class="sh">Girlie Lifestyle</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">End-of-week</span></div>
+      <p class="day-note">Personality</p>
+    </div>
+    <div class="day-col">
+      <div class="day-head">Sun</div>
+      <div class="slot slot-j"><span class="sf">Reel</span><span class="sh">Journey / reflection</span></div>
+      <div class="slot slot-ig"><span class="sf">Story</span><span class="sh">Week ahead</span></div>
+      <p class="day-note">Warm / intimate</p>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="ldot" style="background:var(--j-mid);"></span>The Journey</span>
+    <span><span class="ldot" style="background:var(--pc-mid);"></span>Padel Culture</span>
+    <span><span class="ldot" style="background:var(--ae-mid);"></span>Athlete Era</span>
+    <span><span class="ldot" style="background:var(--gl-mid);"></span>Girlie Lifestyle</span>
+    <span><span class="ldot" style="background:#fce7f3;"></span>Story posts</span>
+  </div>
+</section>
+
+<!-- PLANNER -->
+<section id="planner">
+  <p class="sec-label">Content planner · ideas auto-save to your browser</p>
+
+  <div class="data-bar">
+    <div class="data-bar-info" id="data-bar-info">
+      <strong>Data storage</strong>
+      Saved locally in this browser. Export a backup regularly, or connect Supabase to sync with collaborators.
+    </div>
+    <span class="db-badge db-local" id="db-badge"><span class="db-dot"></span><span id="db-status">Local only</span></span>
+    <button class="btn btn-sm" onclick="exportAll()">Export backup</button>
+    <button class="btn btn-sm" onclick="importAll()">Import</button>
+  </div>
+
+  <div class="callout">
+    <h3>Asia trip — filming opportunity</h3>
+    <p style="margin-bottom:7px;">Aesthetic + Athlete Era content at distinctive locations. Padel in Asia is visually unlike anything on the platform — novel thumbnail, natural story hook.</p>
+    <span class="loc">Tokyo · minimalist courts</span>
+    <span class="loc">Singapore · high-design clubs</span>
+    <span class="loc">Bali · tropical outdoor</span>
+    <span class="loc">Bangkok · rooftop venues</span>
+    <p style="margin-top:8px;font-size:11px;opacity:.7;">Block trip week below. Film at 2–3 venues. Use footage across 1 YouTube video + 3–4 standalone Reels post-trip.</p>
+  </div>
+
+  <div class="planner-top">
+    <div class="view-toggle">
+      <button class="vt-btn active" id="vt-week" onclick="setView('week')">Week</button>
+      <button class="vt-btn" id="vt-month" onclick="setView('month')">Month</button>
+    </div>
+    <div class="week-nav" id="week-controls">
+      <button onclick="changeWeek(-1)">&#8592;</button>
+      <span id="week-label">Loading...</span>
+      <button onclick="changeWeek(1)">&#8594;</button>
+      <button class="btn btn-sm" onclick="markAsTrip()">Mark as Asia trip week</button>
+      <button class="btn btn-sm" onclick="clearWeek()" style="color:var(--text3);">Clear week</button>
+      <span id="trip-badge" class="trip-badge">Asia trip</span>
+    </div>
+    <div class="mnav" id="month-controls" style="display:none;">
+      <button onclick="changeMonth(-1)">&#8592;</button>
+      <span id="month-label">Loading...</span>
+      <button onclick="changeMonth(1)">&#8594;</button>
+    </div>
+  </div>
+
+  <div id="week-view">
+    <div class="pgrid" id="pgrid"></div>
+  </div>
+  <div id="month-view" style="display:none;">
+    <div id="mgrid"></div>
+  </div>
+
+  <div style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1rem;">
+    <p class="sec-label">Ideas bank · drag any idea onto a date ↑</p>
+    <div class="ideas-row">
+      <input type="text" id="idea-input" placeholder="Type a content idea and press Enter...">
+      <button class="btn" onclick="addIdea()">Add</button>
+      <button class="btn btn-sm" id="export-btn" onclick="exportIdeas()" style="white-space:nowrap;">Copy all</button>
+    </div>
+    <div class="ideas-list" id="ideas-list"></div>
+  </div>
+</section>
+
+<!-- PHASE PLAN -->
+<section id="plan">
+  <p class="sec-label">Phase plan · May – September 2026</p>
+  <div class="tl-row">
+    <div class="tl-dot" style="background:var(--j);"></div><div class="tl-line"></div>
+    <div class="tl-dot" style="background:var(--pc);"></div><div class="tl-line"></div>
+    <div class="tl-dot" style="background:var(--ae);"></div><div class="tl-line"></div>
+    <div class="tl-dot" style="background:var(--gl);"></div>
+  </div>
+  <div class="gf">
+    <div class="card" style="border-left:3px solid var(--j);">
+      <p style="font-size:11px;font-weight:600;color:var(--j-text);margin-bottom:2px;">Phase 1</p>
+      <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Test &amp; learn</p>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:10px;">May – July 2026</p>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5;">Post across all 4 pillars. See what resonates — which formats get saves, shares, comments. Let the data tell you where to double down.</p>
+      <div class="ci"><span class="tag tag-j">J</span>Try both vulnerability + milestone formats</div>
+      <div class="ci"><span class="tag tag-pc">PC</span>Test humor vs. niche education</div>
+      <div class="ci"><span class="tag tag-ae">AE</span>Routine content vs. performance data</div>
+      <div class="ci"><span class="tag tag-gl">GL</span>Outfits, lifestyle, aesthetic moments</div>
+      <div class="ci"><span class="tag tag-j" style="white-space:nowrap;">YT 1</span>Origin story — launch YouTube</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--ae);">
+      <p style="font-size:11px;font-weight:600;color:var(--ae-text);margin-bottom:2px;">Phase 2</p>
+      <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Pre-tournament focus</p>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:10px;">July – August 2026</p>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5;">The narrative builds. Training ramps up. The audience starts rooting for you. Make them feel the weight of what's coming.</p>
+      <div class="ci"><span class="tag tag-j">J</span>"X days until my first pro tournament"</div>
+      <div class="ci"><span class="tag tag-ae">AE</span>Training montages · recovery · prep</div>
+      <div class="ci"><span class="tag tag-j">J</span>Mental state · pressure · nerves (honest)</div>
+      <div class="ci"><span class="tag tag-gl">GL</span>Tournament prep GRWM</div>
+      <div class="ci"><span class="tag tag-j" style="white-space:nowrap;">YT 2</span>Pre-tournament documentary vlog</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--pc);">
+      <p style="font-size:11px;font-weight:600;color:var(--pc-text);margin-bottom:2px;">Phase 3</p>
+      <p style="font-size:14px;font-weight:600;margin-bottom:4px;">FIP Bronze + aftermath</p>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:10px;">August – September 2026</p>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5;">The payoff moment. Win or lose — this is the most shareable content of the year. Don't skip the honest post-match reaction.</p>
+      <div class="ci"><span class="tag tag-j">J</span>Day-of coverage · live feelings</div>
+      <div class="ci"><span class="tag tag-j">J</span>Honest post-tournament reaction</div>
+      <div class="ci"><span class="tag tag-ae">AE</span>What the data looked like · WHOOP match</div>
+      <div class="ci"><span class="tag tag-j" style="white-space:nowrap;">YT 3</span>Tournament documentary</div>
+      <div class="ci"><span class="tag tag-j" style="white-space:nowrap;">YT 4</span>"What it actually costs to go pro"</div>
+    </div>
+  </div>
+  <div class="legend" style="margin-top:12px;">
+    <span><strong>J</strong> = The Journey</span>
+    <span><strong>PC</strong> = Padel Culture</span>
+    <span><strong>AE</strong> = Athlete Era</span>
+    <span><strong>GL</strong> = Girlie Lifestyle</span>
+    <span><strong>YT #</strong> = YouTube video in sequence</span>
+  </div>
+</section>
+
+</div>
+
+<!-- SCRIPT MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeScript()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-pill" id="modal-pill"></span>
+      <span class="modal-title" id="modal-date-label"></span>
+      <button class="modal-close" onclick="closeScript()">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <span class="mlabel">Idea / hook</span>
+        <div class="modal-idea" id="modal-idea">—</div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;">
+        <span class="mlabel">Script · talking points · shot list</span>
+        <textarea class="modal-script" id="modal-script" placeholder="Write your script or talking points here. Use bullet points, timestamps, shot descriptions — whatever helps you film.&#10;&#10;Example:&#10;• Hook (0-3s): stand in front of the court, say '...'&#10;• Setup (3-8s): show footage of...&#10;• Main point: ...&#10;• CTA: 'follow for more'"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="modal-hint">Auto-saves when you close</span>
+      <button class="btn" onclick="closeScript()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCH=[
+  {key:'mon',label:'Monday',off:0,slots:[{fmt:'Reel',hook:'The Journey',cls:'s-j'},{fmt:'Story',hook:'BTS',cls:'s-ig'}]},
+  {key:'tue',label:'Tuesday',off:1,slots:[{fmt:'Reel',hook:'Padel Culture',cls:'s-pc'},{fmt:'Story',hook:'Humor BTS',cls:'s-ig'}]},
+  {key:'wed',label:'Wednesday',off:2,slots:[{fmt:'Carousel',hook:'Tips / saves',cls:'s-gr'},{fmt:'Story',hook:'Mid-week',cls:'s-ig'}]},
+  {key:'thu',label:'Thursday',off:3,slots:[{fmt:'Reel',hook:'Athlete Era',cls:'s-ae'},{fmt:'Story',hook:'Training BTS',cls:'s-ig'}]},
+  {key:'fri',label:'Friday',off:4,slots:[{fmt:'Carousel',hook:'Girlie Lifestyle',cls:'s-gl'},{fmt:'Story',hook:'End-of-week',cls:'s-ig'}]},
+  {key:'sun',label:'Sunday',off:6,slots:[{fmt:'Reel',hook:'Journey / reflection',cls:'s-j'},{fmt:'Story',hook:'Week ahead',cls:'s-ig'}]}
+];
+
+// ── date helpers ─────────────────────────────────────────────────────────────
+function ds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function fd(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function wk(d){return 'w_'+ds(d);}
+function lw(m){try{return JSON.parse(localStorage.getItem(wk(m)))||{};}catch{return{};}}
+function sw(m,data){lset(wk(m),JSON.stringify(data));}
+function getDayKey(date){return['sun','mon','tue','wed','thu','fri','sat'][date.getDay()];}
+function getMonForDate(date){
+  const d=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+  const day=d.getDay();
+  d.setDate(d.getDate()+(day===0?-6:1-day));
+  return d;
+}
+function getDateSlot(date,si){
+  const m=getMonForDate(date),dk=getDayKey(date),data=lw(m);
+  return data[dk+'_'+si]||'';
+}
+function setDateSlot(date,si,val){
+  const m=getMonForDate(date),dk=getDayKey(date),data=lw(m);
+  data[dk+'_'+si]=val;
+  sw(m,data);
+}
+
+// ── week view ────────────────────────────────────────────────────────────────
+let wo=0;
+let currentView='week';
+function getMon(o){const d=new Date(2026,4,11);d.setDate(d.getDate()+o*7);return d;}
+function changeWeek(d){wo+=d;rp();}
+function markAsTrip(){const m=getMon(wo),data=lw(m);data._trip=!data._trip;sw(m,data);rp();}
+function clearWeek(){if(!confirm('Clear all ideas for this week?'))return;ldel(wk(getMon(wo)));rp();}
+function rp(){
+  const m=getMon(wo),s=new Date(m);s.setDate(s.getDate()+6);
+  document.getElementById('week-label').textContent=fd(m)+' – '+fd(s);
+  const data=lw(m);
+  document.getElementById('trip-badge').style.display=data._trip?'inline-block':'none';
+  const g=document.getElementById('pgrid');g.innerHTML='';
+  SCH.forEach(day=>{
+    const dd=new Date(m);dd.setDate(dd.getDate()+day.off);
+    const dStr=ds(dd);
+    const col=document.createElement('div');
+    col.innerHTML='<div class="pday-head"><span class="dn">'+day.label.slice(0,3)+'</span><span class="dd">'+fd(dd)+'</span></div>';
+    day.slots.forEach((sl,si)=>{
+      const sv=data[day.key+'_'+si]||'';
+      const hsSc=!!getScript(dStr,si);
+      const el=document.createElement('div');
+      el.className='pslot '+sl.cls;
+      el.innerHTML='<div class="pslot-top"><span class="pslot-fmt">'+sl.fmt+'</span><span class="pslot-hook">'+sl.hook+'</span><button class="script-btn'+(hsSc?' has-script':'')+'" title="'+(hsSc?'Edit script':'Write script')+'" onclick="openScript(\''+dStr+'\','+si+')">'+(hsSc?'📝':'✍️')+'</button></div><textarea rows="2" placeholder="Idea...">'+sv.replace(/</g,'&lt;')+'</textarea>';
+      const ta=el.querySelector('textarea');
+      ta.addEventListener('input',function(){const d2=lw(getMon(wo));d2[day.key+'_'+si]=this.value;sw(getMon(wo),d2);});
+      // drop target
+      el.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy';el.classList.add('drag-over');});
+      el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));
+      el.addEventListener('drop',e=>{
+        e.preventDefault();el.classList.remove('drag-over');
+        const txt=e.dataTransfer.getData('text/plain');
+        ta.value=(ta.value?ta.value+'\n':'')+txt;
+        const d2=lw(getMon(wo));d2[day.key+'_'+si]=ta.value;sw(getMon(wo),d2);
+      });
+      col.appendChild(el);
+    });
+    g.appendChild(col);
+  });
+}
+
+// ── month view ───────────────────────────────────────────────────────────────
+let mo=0;
+function changeMonth(d){mo+=d;rm();}
+function rm(){
+  const base=new Date(2026,4+mo,1);
+  const y=base.getFullYear(),m=base.getMonth();
+  document.getElementById('month-label').textContent=base.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const firstDay=new Date(y,m,1).getDay();
+  const leadDays=firstDay===0?6:firstDay-1;
+  const calStart=new Date(y,m,1-leadDays);
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const numRows=Math.ceil((leadDays+daysInMonth)/7);
+  const today=new Date();today.setHours(0,0,0,0);
+  let html='<table class="mcal"><thead><tr>';
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(h=>html+='<th>'+h+'</th>');
+  html+='</tr></thead><tbody>';
+  for(let row=0;row<numRows;row++){
+    html+='<tr>';
+    for(let col=0;col<7;col++){
+      const d=new Date(calStart);d.setDate(d.getDate()+row*7+col);
+      const inMonth=d.getMonth()===m;
+      const dayKey=getDayKey(d);
+      const sch=SCH.find(s=>s.key===dayKey);
+      const isToday=d.getTime()===today.getTime();
+      const dStr=ds(d);
+      let cls='mday';
+      if(!inMonth)cls+=' out-month';
+      else if(!sch)cls+=' no-post';
+      if(isToday)cls+=' is-today';
+      html+='<td><div class="'+cls+'">';
+      html+='<span class="mday-num">'+d.getDate()+'</span>';
+      if(inMonth&&sch){
+        sch.slots.forEach((sl,si)=>{
+          const pk=sl.cls.replace('s-','');
+          const mid=(pk==='gr'||pk==='ig')?'var(--bg3)':'var(--'+pk+'-mid)';
+          const tc=(pk==='gr'||pk==='ig')?'var(--text2)':'var(--'+pk+'-text)';
+          const idea=getDateSlot(d,si);
+          const hsSc=!!getScript(dStr,si);
+          html+='<div class="mday-slot" data-date="'+dStr+'" data-slot="'+si+'" ondragover="mdayDragOver(event)" ondragleave="mdayDragLeave(event)" ondrop="mdayDrop(event)">';
+          html+='<div style="display:flex;align-items:center;gap:3px;margin-bottom:2px;">';
+          html+='<span class="mday-pill" style="background:'+mid+';color:'+tc+';">'+sl.fmt+'</span>';
+          html+='<button class="script-btn'+(hsSc?' has-script':'')+'" title="'+(hsSc?'Edit script':'Write script')+'" onclick="openScript(\''+dStr+'\','+si+')">'+(hsSc?'📝':'✍️')+'</button>';
+          html+='</div>';
+          html+='<textarea class="mday-ta" rows="2" placeholder="'+sl.hook+'..." data-date="'+dStr+'" data-slot="'+si+'">'+(idea?idea.replace(/</g,'&lt;'):'')+'</textarea>';
+          html+='</div>';
+        });
+      }
+      html+='</div></td>';
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  document.getElementById('mgrid').innerHTML=html;
+  document.querySelectorAll('.mday-ta').forEach(ta=>{
+    ta.addEventListener('input',function(){
+      const d=new Date(this.dataset.date+'T12:00:00');
+      setDateSlot(d,parseInt(this.dataset.slot),this.value);
+    });
+    ta.addEventListener('dragover',e=>{e.stopPropagation();}); // prevent textarea from eating drag events
+  });
+}
+function mdayDragOver(e){e.preventDefault();e.stopPropagation();e.dataTransfer.dropEffect='copy';e.currentTarget.classList.add('drag-over');}
+function mdayDragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function mdayDrop(e){
+  e.preventDefault();e.stopPropagation();
+  const slot=e.currentTarget;slot.classList.remove('drag-over');
+  const txt=e.dataTransfer.getData('text/plain');
+  const d=new Date(slot.dataset.date+'T12:00:00');
+  const si=parseInt(slot.dataset.slot);
+  const cur=getDateSlot(d,si);
+  const nv=cur?cur+'\n'+txt:txt;
+  setDateSlot(d,si,nv);
+  const ta=slot.querySelector('.mday-ta');
+  if(ta)ta.value=nv;
+}
+
+// ── view toggle ───────────────────────────────────────────────────────────────
+function setView(v){
+  currentView=v;
+  document.getElementById('week-view').style.display=v==='week'?'':'none';
+  document.getElementById('month-view').style.display=v==='month'?'':'none';
+  document.getElementById('week-controls').style.display=v==='week'?'flex':'none';
+  document.getElementById('month-controls').style.display=v==='month'?'flex':'none';
+  document.getElementById('vt-week').classList.toggle('active',v==='week');
+  document.getElementById('vt-month').classList.toggle('active',v==='month');
+  if(v==='month')rm();
+}
+
+// ── ideas bank ────────────────────────────────────────────────────────────────
+function li(){try{return JSON.parse(localStorage.getItem('padel_ideas'))||[];}catch{return[];}}
+function si(a){lset('padel_ideas',JSON.stringify(a));}
+function addIdea(){
+  const inp=document.getElementById('idea-input'),t=inp.value.trim();
+  if(!t)return;
+  const a=li();a.unshift({text:t,id:Date.now()});si(a);inp.value='';ri();
+}
+function deleteIdea(id){si(li().filter(i=>i.id!==id));ri();}
+function ri(){
+  const a=li(),l=document.getElementById('ideas-list');
+  if(!a.length){l.innerHTML='<p class="empty-msg">No ideas yet — type one above.</p>';return;}
+  l.innerHTML='';
+  a.forEach(idea=>{
+    const c=document.createElement('div');c.className='idea-chip';c.draggable=true;
+    c.innerHTML='<span>'+idea.text.replace(/</g,'&lt;')+'</span><button class="idea-del">×</button>';
+    c.querySelector('button').onclick=()=>deleteIdea(idea.id);
+    c.addEventListener('dragstart',e=>{
+      e.dataTransfer.setData('text/plain',idea.text);
+      e.dataTransfer.effectAllowed='copy';
+      setTimeout(()=>c.classList.add('dragging'),0);
+    });
+    c.addEventListener('dragend',()=>c.classList.remove('dragging'));
+    l.appendChild(c);
+  });
+}
+function exportIdeas(){
+  const a=li();
+  if(!a.length){alert('No ideas in the bank yet!');return;}
+  const txt=a.map((x,i)=>(i+1)+'. '+x.text).join('\n');
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=document.getElementById('export-btn');
+    const orig=btn.textContent;btn.textContent='Copied!';btn.style.color='var(--ae-text)';
+    setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1800);
+  }).catch(()=>{prompt('Copy this:',txt);});
+}
+// ── script modal ─────────────────────────────────────────────────────────────
+function getScript(dateStr,si){ return localStorage.getItem('sc_'+dateStr+'_'+si)||''; }
+function saveScript(dateStr,si,text){
+  if(text) lset('sc_'+dateStr+'_'+si,text);
+  else ldel('sc_'+dateStr+'_'+si);
+}
+let modalDateStr='',modalSlot=0;
+function openScript(dateStr,si){
+  modalDateStr=dateStr; modalSlot=si;
+  const d=new Date(dateStr+'T12:00:00');
+  const idea=getDateSlot(d,si);
+  const sch=SCH.find(s=>s.key===getDayKey(d));
+  const sl=sch?sch.slots[si]:null;
+  const pill=document.getElementById('modal-pill');
+  if(sl){
+    const pk=sl.cls.replace('s-','');
+    const mid=(pk==='gr'||pk==='ig')?'var(--bg3)':'var(--'+pk+'-mid)';
+    const tc=(pk==='gr'||pk==='ig')?'var(--text2)':'var(--'+pk+'-text)';
+    pill.textContent=sl.fmt; pill.style.background=mid; pill.style.color=tc;
+  }
+  document.getElementById('modal-date-label').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('modal-idea').textContent=idea||'(no idea written yet — type one in the calendar first)';
+  document.getElementById('modal-script').value=getScript(dateStr,si);
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('modal-script').focus(),60);
+}
+function closeScript(){
+  saveScript(modalDateStr,modalSlot,document.getElementById('modal-script').value);
+  document.getElementById('modal-overlay').classList.remove('open');
+  if(currentView==='week') rp(); else rm();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('modal-overlay').classList.contains('open'))closeScript();});
+
+// ── export / import all data ─────────────────────────────────────────────────
+function exportAll(){
+  const data={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);data[k]=localStorage.getItem(k);}
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='padel-plan-backup-'+new Date().toISOString().split('T')[0]+'.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+function importAll(){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='.json';
+  inp.onchange=e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!confirm('This will replace all current data with the backup. Continue?'))return;
+        localStorage.clear();
+        Object.entries(data).forEach(([k,v])=>localStorage.setItem(k,v));
+        cloudPushAll();
+        rp();ri(); if(currentView==='month')rm();
+        alert('✓ Backup imported successfully.');
+      }catch{alert('Could not read file — make sure it\'s a valid backup JSON.');}
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+
+// ── Supabase cloud sync ──────────────────────────────────────────────────────
+// Storage model:
+//   • localStorage stays the fast, synchronous local cache the UI reads from.
+//   • Every write is mirrored to Supabase (debounced, batched). If a write
+//     fails, the data is already safe in localStorage and is retried later.
+//   • On load + every 20s + on window focus we pull the whole table from
+//     Supabase into localStorage so the two collaborators see each other's
+//     changes. Keys with an unflushed local edit are never overwritten.
+// Credentials come from window.__ENV__, injected at build time by build.js.
+// If they're missing the app runs exactly as before — localStorage only.
+
+const __ENV__ = (typeof window!=='undefined' && window.__ENV__) || {};
+const SUPABASE_URL = (__ENV__.SUPABASE_URL || '').replace(/\/+$/,'');
+const SUPABASE_KEY = __ENV__.SUPABASE_ANON_KEY || '';
+const SUPABASE_ENABLED = !!(
+  SUPABASE_URL && SUPABASE_KEY &&
+  !SUPABASE_URL.startsWith('__') && !SUPABASE_KEY.startsWith('__') &&
+  /^https?:\/\//.test(SUPABASE_URL)
+);
+const SB_HEADERS = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+const SB_TABLE = SUPABASE_URL + '/rest/v1/content_plan';
+
+// keys we manage (used when reconciling deletions on pull)
+function isAppKey(k){ return k==='padel_ideas' || k.startsWith('w_') || k.startsWith('sc_'); }
+
+let cloudOk = SUPABASE_ENABLED;          // optimistic until first failure
+const pending = new Map();               // key -> latest value awaiting push
+let flushTimer = null, flushing = false;
+
+// ── write path ───────────────────────────────────────────────────────────────
+function lset(key, value){ localStorage.setItem(key, value); cloudPush(key, value); }
+function ldel(key){ localStorage.removeItem(key); cloudDelete(key); }
+
+function cloudPush(key, value){
+  if(!SUPABASE_ENABLED) return;
+  pending.set(key, value);
+  scheduleFlush(700);
+}
+function scheduleFlush(ms){
+  if(flushTimer || flushing) return;
+  flushTimer = setTimeout(()=>{ flushTimer = null; flushPending(); }, ms);
+}
+async function flushPending(){
+  if(!SUPABASE_ENABLED || flushing || pending.size===0) return;
+  flushing = true;
+  const snapshot = new Map(pending);
+  pending.clear();
+  const body = JSON.stringify(Array.from(snapshot, ([key,value])=>({ key, value, updated_at: new Date().toISOString() })));
+  try{
+    const r = await fetch(SB_TABLE, {
+      method:'POST',
+      headers:{ ...SB_HEADERS, 'Content-Type':'application/json', 'Prefer':'resolution=merge-duplicates,return=minimal' },
+      body
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status+' '+(await r.text().catch(()=>'')));
+    cloudOk = true; updateDbBadge();
+  }catch(e){
+    console.warn('Supabase write failed — data is safe in localStorage, will retry', e);
+    cloudOk = false; updateDbBadge();
+    snapshot.forEach((v,k)=>{ if(!pending.has(k)) pending.set(k,v); });   // re-queue, newest wins
+    flushing = false;
+    scheduleFlush(5000);
+    return;
+  }
+  flushing = false;
+  if(pending.size) scheduleFlush(700);
+}
+async function cloudDelete(key){
+  if(!SUPABASE_ENABLED) return;
+  pending.delete(key);
+  try{
+    const r = await fetch(SB_TABLE + '?key=eq.' + encodeURIComponent(key), { method:'DELETE', headers:{ ...SB_HEADERS, 'Prefer':'return=minimal' } });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    cloudOk = true;
+  }catch(e){ console.warn('Supabase delete failed', e); cloudOk = false; }
+  updateDbBadge();
+}
+async function cloudPushAll(){
+  if(!SUPABASE_ENABLED) return;
+  const batch=[];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k!=='__ENV__') batch.push({ key:k, value:localStorage.getItem(k), updated_at:new Date().toISOString() }); }
+  if(!batch.length) return;
+  try{
+    const r = await fetch(SB_TABLE, { method:'POST', headers:{ ...SB_HEADERS, 'Content-Type':'application/json', 'Prefer':'resolution=merge-duplicates,return=minimal' }, body:JSON.stringify(batch) });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    cloudOk = true;
+  }catch(e){ console.warn('Supabase bulk push failed', e); cloudOk = false; }
+  updateDbBadge();
+}
+
+// ── read path ────────────────────────────────────────────────────────────────
+async function cloudPullAll(){
+  if(!SUPABASE_ENABLED) return false;
+  try{
+    const r = await fetch(SB_TABLE + '?select=key,value', { headers: SB_HEADERS });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const rows = await r.json();
+    let changed = false;
+    const seen = new Set();
+    rows.forEach(({key,value})=>{
+      seen.add(key);
+      if(pending.has(key)) return;                       // don't clobber an unsynced local edit
+      if(localStorage.getItem(key) !== value){ localStorage.setItem(key, value); changed = true; }
+    });
+    // propagate deletions made on the other machine
+    for(let i=localStorage.length-1;i>=0;i--){
+      const k = localStorage.key(i);
+      if(k && isAppKey(k) && !seen.has(k) && !pending.has(k)){ localStorage.removeItem(k); changed = true; }
+    }
+    cloudOk = true; updateDbBadge();
+    return changed;
+  }catch(e){ console.warn('Supabase pull failed — using local data', e); cloudOk = false; updateDbBadge(); return false; }
+}
+async function syncTick(){
+  const changed = await cloudPullAll();
+  if(!changed) return;
+  const ae = document.activeElement;
+  if(ae && (ae.tagName==='TEXTAREA' || ae.tagName==='INPUT')) return;   // don't yank focus mid-edit; picks up next tick
+  if(currentView==='week') rp(); else rm();
+  ri();
+}
+
+// ── status badge / storage note ──────────────────────────────────────────────
+function updateDbBadge(){
+  const badge=document.getElementById('db-badge'), status=document.getElementById('db-status'), info=document.getElementById('data-bar-info');
+  if(SUPABASE_ENABLED && cloudOk){
+    badge.className='db-badge db-live'; status.textContent='Cloud sync on';
+    if(info) info.innerHTML='<strong>Cloud sync on</strong>Saved to Supabase and synced between collaborators automatically — a local copy is kept as backup.';
+  }else if(SUPABASE_ENABLED){
+    badge.className='db-badge db-local'; status.textContent='Reconnecting…';
+    if(info) info.innerHTML='<strong>Cloud sync — reconnecting</strong>Can’t reach Supabase right now. Changes are saved locally and will sync as soon as the connection is back.';
+  }else{
+    badge.className='db-badge db-local'; status.textContent='Local only';
+    if(info) info.innerHTML='<strong>Local only</strong>Saved in this browser. Export a backup regularly, or set the Supabase env vars on Vercel to sync with collaborators.';
+  }
+}
+
+// ── boot ─────────────────────────────────────────────────────────────────────
+async function init(){
+  document.getElementById('idea-input').addEventListener('keydown',e=>{if(e.key==='Enter')addIdea();});
+  updateDbBadge();
+  rp(); ri();                                  // paint instantly from the local cache
+  if(SUPABASE_ENABLED){
+    const changed = await cloudPullAll();
+    if(changed){ if(currentView==='week') rp(); else rm(); ri(); }
+    setInterval(syncTick, 20000);
+    window.addEventListener('focus', syncTick);
+    window.addEventListener('online', syncTick);
+    document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden' && pending.size) flushPending(); else if(document.visibilityState==='visible') syncTick(); });
+    window.addEventListener('beforeunload', ()=>{ if(pending.size) flushPending(); });
+  }
+}
+init();
+</script>
+</body>
+</html>

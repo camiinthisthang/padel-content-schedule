@@ -1,0 +1,10 @@
+{
+  "name": "padel-content-schedule",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static content-strategy planner for Cami Padel — Supabase-backed, deployed on Vercel",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js && cd dist && python3 -m http.server 4000"
+  }
+}
