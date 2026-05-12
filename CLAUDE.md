@@ -4,7 +4,7 @@ Working notes + roadmap for the content-planning app. Read this before changing 
 
 ## What this app is (current state)
 
-A single-page content planner for a padel athlete (Cami) and her video editors.
+A single-page content planner for a padel athlete (Cami) and her video editors. **Mobile-first** (it's used mostly on phones) with a soft **Y2K-girly "blog" aesthetic** — candy-pink/lilac palette, chunky rounded corners, `Baloo 2` display + `Quicksand` body fonts, pastel pillar colors — kept legible. The base CSS is desktop; a `@media (max-width:720px)` block stacks every grid (planner week view becomes a 1-column agenda, month grid scrolls sideways), fattens tap targets, and sets editable fields to 16px so iOS doesn't zoom on focus. The old "Asia trip" callout box was removed (2026-05-11) — the `markAsTrip()`/`_trip` plumbing is still there, just unused.
 
 - **Frontend:** one static file, `public/index.html` — vanilla HTML/CSS/JS. **No framework, no bundler, no npm dependencies in the app.** Keep it that way for the UI.
 - **Storage:** Supabase, via the REST API called directly from the browser. One key/value table:
@@ -120,16 +120,16 @@ Don't over-build this; it works.
 - **Feature 3 — where AI suggestions land:** a **separate "review" area** (e.g. a "Suggestions" panel under the Performance tab). Cami approves items there; approving a follow-up/repurpose idea promotes it into the Ideas bank. Do **not** write AI output straight into the bank.
 
 ## Still open
-- `APIFY_TOKEN` (re-ask Cami — last paste was mangled)
-- A monthly spend ceiling for Gemini video analysis (the `GOOGLE_API_KEY` itself is set). Default if unanswered: `gemini-*-flash` for all videos, the pricier `-pro` pass only on the top ~10 by views.
-- Translation provider + key for Feature 2 (Cami parked it)
+- A monthly spend ceiling for Gemini video analysis. Default if unanswered: `gemini-*-flash` for every video, the pricier `-pro` pass only on the top ~10 by views.
+- `CRON_SECRET` (generate when building #3).
+- All API keys are now in Vercel: SUPABASE_URL/ANON_KEY, ANTHROPIC_API_KEY, APIFY_TOKEN, GOOGLE_API_KEY. So Features 2 and 3 are unblocked — build them per the plan above (build order: #2 then #3).
 
 ## Required env vars (set in Vercel → Settings → Environment Variables)
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY` — already set ✅
-- `ANTHROPIC_API_KEY` — Feature 2 (if Anthropic chosen) — not set yet
-- `APIFY_TOKEN` — Feature 3 — not set yet
+- `ANTHROPIC_API_KEY` — Feature 2 — ✅ set in Vercel (Prod + Dev) on 2026-05-11; Anthropic chosen as the translation provider
+- `APIFY_TOKEN` — Feature 3 — ✅ set in Vercel (Prod + Dev) on 2026-05-11
 - `GOOGLE_API_KEY` (Gemini) — Feature 3 — ✅ set in Vercel (Production + Development) on 2026-05-11
-- `CRON_SECRET` — Feature 3 cron routes — not set yet
+- `CRON_SECRET` — Feature 3 cron routes — not set yet (generate one and add it when building #3)
 
 ## Conventions
 - Money/counts shown in a mono font, accent color for the headline number (match the existing aesthetic — neutral light theme, pillar colors `--j/--pc/--ae/--gl`).
