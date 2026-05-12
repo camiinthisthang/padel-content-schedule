@@ -213,6 +213,15 @@ section { margin-bottom: 3.5rem; scroll-margin-top: 52px; }
 .script-btn:hover { color:var(--ae-text);background:var(--ae-bg); }
 .script-btn.has-script { color:var(--ae-text); }
 
+/* inspiration-video link buttons (purple = --gl, to read distinct from teal scripts) */
+.inspo-btn { background:none;border:none;cursor:pointer;font-size:11px;padding:1px 3px;color:var(--text3);line-height:1;border-radius:3px;flex-shrink:0;transition:color .1s;text-decoration:none;font-family:inherit; }
+.inspo-btn:hover { color:var(--gl-text);background:var(--gl-bg); }
+.inspo-btn.has-inspo { color:var(--gl-text); }
+.idea-chip a.idea-inspo { color:var(--gl-text);text-decoration:none;font-size:12px;line-height:1; }
+.idea-chip a.idea-inspo:hover { filter:brightness(.8); }
+.idea-chip .idea-inspo-edit { background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:0 1px;line-height:1;font-family:inherit; }
+.idea-chip .idea-inspo-edit:hover { color:var(--gl-text); }
+
 /* script modal */
 .modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:1000;align-items:center;justify-content:center; }
 .modal-overlay.open { display:flex; }
@@ -712,7 +721,7 @@ function rp(){
       const hsSc=!!getScript(dStr,si);
       const el=document.createElement('div');
       el.className='pslot '+sl.cls;
-      el.innerHTML='<div class="pslot-top"><span class="pslot-fmt">'+sl.fmt+'</span><span class="pslot-hook">'+sl.hook+'</span><button class="script-btn'+(hsSc?' has-script':'')+'" title="'+(hsSc?'Edit script':'Write script')+'" onclick="openScript(\''+dStr+'\','+si+')">'+(hsSc?'📝':'✍️')+'</button></div><textarea rows="2" placeholder="Idea...">'+sv.replace(/</g,'&lt;')+'</textarea>';
+      el.innerHTML='<div class="pslot-top"><span class="pslot-fmt">'+sl.fmt+'</span><span class="pslot-hook">'+sl.hook+'</span><span style="display:flex;gap:1px;align-items:center;flex-shrink:0;"><button class="script-btn'+(hsSc?' has-script':'')+'" title="'+(hsSc?'Edit script':'Write script')+'" onclick="openScript(\''+dStr+'\','+si+')">'+(hsSc?'📝':'✍️')+'</button>'+inspoBtns(dStr,si)+'</span></div><textarea rows="2" placeholder="Idea...">'+sv.replace(/</g,'&lt;')+'</textarea>';
       const ta=el.querySelector('textarea');
       ta.addEventListener('input',function(){const d2=lw(getMon(wo));d2[day.key+'_'+si]=this.value;sw(getMon(wo),d2);});
       // drop target
@@ -723,6 +732,8 @@ function rp(){
         const txt=e.dataTransfer.getData('text/plain');
         ta.value=(ta.value?ta.value+'\n':'')+txt;
         const d2=lw(getMon(wo));d2[day.key+'_'+si]=ta.value;sw(getMon(wo),d2);
+        const ins=e.dataTransfer.getData('application/x-inspo');
+        if(ins&&!getInspo(dStr,si)){ setInspo(dStr,si,ins); rp(); }
       });
       col.appendChild(el);
     });
@@ -769,9 +780,10 @@ function rm(){
           const idea=getDateSlot(d,si);
           const hsSc=!!getScript(dStr,si);
           html+='<div class="mday-slot" data-date="'+dStr+'" data-slot="'+si+'" ondragover="mdayDragOver(event)" ondragleave="mdayDragLeave(event)" ondrop="mdayDrop(event)">';
-          html+='<div style="display:flex;align-items:center;gap:3px;margin-bottom:2px;">';
+          html+='<div style="display:flex;align-items:center;gap:2px;margin-bottom:2px;">';
           html+='<span class="mday-pill" style="background:'+mid+';color:'+tc+';">'+sl.fmt+'</span>';
           html+='<button class="script-btn'+(hsSc?' has-script':'')+'" title="'+(hsSc?'Edit script':'Write script')+'" onclick="openScript(\''+dStr+'\','+si+')">'+(hsSc?'📝':'✍️')+'</button>';
+          html+=inspoBtns(dStr,si);
           html+='</div>';
           html+='<textarea class="mday-ta" rows="2" placeholder="'+sl.hook+'..." data-date="'+dStr+'" data-slot="'+si+'">'+(idea?idea.replace(/</g,'&lt;'):'')+'</textarea>';
           html+='</div>';
@@ -804,6 +816,8 @@ function mdayDrop(e){
   setDateSlot(d,si,nv);
   const ta=slot.querySelector('.mday-ta');
   if(ta)ta.value=nv;
+  const ins=e.dataTransfer.getData('application/x-inspo');
+  if(ins&&!getInspo(slot.dataset.date,si)){ setInspo(slot.dataset.date,si,ins); rm(); }
 }
 
 // ── view toggle ───────────────────────────────────────────────────────────────
@@ -827,16 +841,31 @@ function addIdea(){
   const a=li();a.unshift({text:t,id:Date.now()});si(a);inp.value='';ri();
 }
 function deleteIdea(id){si(li().filter(i=>i.id!==id));ri();}
+function editIdeaInspo(id){
+  const a=li(), idea=a.find(x=>x.id===id);
+  if(!idea) return;
+  const v=prompt('Inspiration video link for:\n"'+idea.text.slice(0,80)+(idea.text.length>80?'…':'')+'"\n\nPaste an Instagram / TikTok / YouTube URL (leave blank to remove):', idea.inspo||'');
+  if(v===null) return;
+  const u=normUrl(v);
+  if(u) idea.inspo=u; else delete idea.inspo;
+  si(a); ri();
+}
 function ri(){
   const a=li(),l=document.getElementById('ideas-list');
   if(!a.length){l.innerHTML='<p class="empty-msg">No ideas yet — type one above.</p>';return;}
   l.innerHTML='';
   a.forEach(idea=>{
     const c=document.createElement('div');c.className='idea-chip';c.draggable=true;
-    c.innerHTML='<span>'+idea.text.replace(/</g,'&lt;')+'</span><button class="idea-del">×</button>';
-    c.querySelector('button').onclick=()=>deleteIdea(idea.id);
+    let inner='<span class="idea-text">'+esc(idea.text)+'</span>';
+    if(idea.inspo) inner+='<a class="idea-inspo" draggable="false" href="'+escAttr(idea.inspo)+'" target="_blank" rel="noopener" title="Inspiration video — '+escAttr(idea.inspo)+'">🎬</a>';
+    inner+='<button class="idea-inspo-edit" title="'+(idea.inspo?'Edit / remove inspiration link':'Add inspiration video link')+'">'+(idea.inspo?'✎':'🔗')+'</button>';
+    inner+='<button class="idea-del" title="Delete idea">×</button>';
+    c.innerHTML=inner;
+    c.querySelector('.idea-del').onclick=(e)=>{e.stopPropagation();deleteIdea(idea.id);};
+    c.querySelector('.idea-inspo-edit').onclick=(e)=>{e.stopPropagation();editIdeaInspo(idea.id);};
     c.addEventListener('dragstart',e=>{
       e.dataTransfer.setData('text/plain',idea.text);
+      if(idea.inspo) e.dataTransfer.setData('application/x-inspo',idea.inspo);
       e.dataTransfer.effectAllowed='copy';
       setTimeout(()=>c.classList.add('dragging'),0);
     });
@@ -854,6 +883,30 @@ function exportIdeas(){
     setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1800);
   }).catch(()=>{prompt('Copy this:',txt);});
 }
+// ── small helpers ────────────────────────────────────────────────────────────
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return String(s).replace(/[<>"'&]/g,c=>({'<':'%3C','>':'%3E','"':'%22',"'":'%27','&':'&amp;'}[c])); }
+function normUrl(u){ u=(u||'').trim(); if(!u) return ''; if(!/^https?:\/\//i.test(u)) u='https://'+u.replace(/^\/+/,''); return u; }
+
+// ── inspiration-video links (per calendar slot: insp_<date>_<slot>) ──────────
+function getInspo(dateStr,si){ return localStorage.getItem('insp_'+dateStr+'_'+si)||''; }
+function setInspo(dateStr,si,url){ if(url) lset('insp_'+dateStr+'_'+si,url); else ldel('insp_'+dateStr+'_'+si); }
+function openInspo(dateStr,si){ const u=getInspo(dateStr,si); if(u) window.open(u,'_blank','noopener'); }
+function editInspo(dateStr,si){
+  const cur=getInspo(dateStr,si);
+  const v=prompt('Inspiration video link for this slot — Instagram / TikTok / YouTube (leave blank to remove):', cur);
+  if(v===null) return;
+  setInspo(dateStr,si,normUrl(v));
+  if(currentView==='week') rp(); else rm();
+}
+// renders the inspo control(s) for a calendar slot, into a string
+function inspoBtns(dateStr,si){
+  const u=getInspo(dateStr,si);
+  if(u) return '<button class="inspo-btn has-inspo" title="Open inspiration video" onclick="openInspo(\''+dateStr+'\','+si+')">🎬</button>'
+              +'<button class="inspo-btn" style="font-size:9px;opacity:.55" title="Edit / remove inspiration link" onclick="editInspo(\''+dateStr+'\','+si+')">✎</button>';
+  return '<button class="inspo-btn" title="Add inspiration video link" onclick="editInspo(\''+dateStr+'\','+si+')">🔗</button>';
+}
+
 // ── script modal ─────────────────────────────────────────────────────────────
 function getScript(dateStr,si){ return localStorage.getItem('sc_'+dateStr+'_'+si)||''; }
 function saveScript(dateStr,si,text){
