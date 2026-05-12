@@ -300,6 +300,21 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
 .db-local .db-dot { background:#e8a000; }
 .db-live .db-dot { background:#19c98c; }
 
+/* ===== MY VIDEOS / PERFORMANCE ===== */
+.kpi-n { font-family:'Baloo 2','Quicksand',sans-serif;font-size:24px;font-weight:800;color:var(--pink-deep);line-height:1.1; }
+.kpi-l { font-size:11px;color:var(--text2);font-weight:600;margin-top:3px; }
+.vid-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
+.vid-card { display:flex;flex-direction:column;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2);box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;transition:transform .12s,border-color .12s; }
+.vid-card:hover { border-color:var(--border2);transform:translateY(-2px); }
+.vid-thumb { width:100%;aspect-ratio:1/1;background-size:cover;background-position:center;background-color:var(--bg3); }
+.vid-thumb-empty::after { content:"🎬";display:flex;align-items:center;justify-content:center;height:100%;font-size:28px;opacity:.4; }
+.vid-body { padding:9px 11px; }
+.vid-views { font-family:'Baloo 2','Quicksand',sans-serif;font-size:18px;font-weight:800;color:var(--pink-deep);line-height:1.1; }
+.vid-views span { font-size:11px;font-weight:600;color:var(--text2);font-family:'Quicksand',sans-serif; }
+.vid-meta { font-size:10.5px;color:var(--text3);margin:3px 0 5px;font-weight:600; }
+.vid-cap { font-size:11.5px;color:var(--text);line-height:1.4; }
+.vid-rank { font-size:9.5px;font-weight:800;color:#fff;background:linear-gradient(130deg,var(--pink),var(--lilac));border-radius:999px;padding:1.5px 7px;display:inline-block;margin-bottom:3px; }
+
 /* =========================================================
    MOBILE — the primary device. Stack the grids, fatten the
    tap targets, 16px inputs so iOS doesn't zoom on focus.
@@ -314,6 +329,9 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
   .top-bar h1::after { display: none; }
 
   .g2, .g4 { grid-template-columns: 1fr; }
+  .g4.kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .vid-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .vid-body { padding: 8px 9px; }
   .gf { flex-direction: column; }
   .split, .fmt-grid { grid-template-columns: 1fr; }
   .split-good { border-left: none; border-top: 1.5px solid var(--border); }
@@ -396,6 +414,7 @@ window.__ENV__ = {
   <a href="#multiply" class="np">Content multiplication</a>
   <a href="#schedule" class="np">Weekly schedule</a>
   <a href="#planner" class="np">Planner</a>
+  <a href="#performance" class="np">My videos</a>
   <a href="#plan" class="np">Phase plan</a>
 </nav>
 
@@ -691,6 +710,16 @@ window.__ENV__ = {
     </div>
     <div class="ideas-list" id="ideas-list"></div>
   </div>
+</section>
+
+<!-- MY VIDEOS / PERFORMANCE -->
+<section id="performance">
+  <p class="sec-label">My videos · performance</p>
+  <div class="data-bar">
+    <div class="data-bar-info" id="vid-info"><strong>Instagram videos</strong>Pull your posts in from Instagram (via Apify) to see how each one's performing. Frame-by-frame AI analysis &amp; repurpose suggestions are the next build.</div>
+    <button class="btn btn-sm" id="vid-sync-btn" onclick="syncVideos()">Sync from Instagram</button>
+  </div>
+  <div id="vid-list"></div>
 </section>
 
 <!-- PHASE PLAN -->
@@ -1277,6 +1306,7 @@ async function cloudPullAll(){
 async function syncTick(){
   const changed = await cloudPullAll();
   if(!changed) return;
+  renderVideos();   // no inputs in here — safe to repaint even mid-edit elsewhere
   const ae = document.activeElement;
   if(ae && (ae.tagName==='TEXTAREA' || ae.tagName==='INPUT')) return;   // don't yank focus mid-edit; picks up next tick
   if(currentView==='week') rp(); else rm();
@@ -1298,15 +1328,85 @@ function updateDbBadge(){
   }
 }
 
+// ── my videos / performance (Apify pull; Gemini analysis is the next build) ──
+function loadVideos(){
+  const out=[];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith('vid_') && k!=='vid_meta'){ try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&v.igPostId) out.push(v); }catch{} } }
+  out.sort((a,b)=>(b.views||0)-(a.views||0));
+  return out;
+}
+function videoMeta(){ try{ return JSON.parse(localStorage.getItem('vid_meta'))||null; }catch{ return null; } }
+function fmtNum(n){ n=Number(n)||0; if(n>=1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'')+'M'; if(n>=1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'')+'k'; return String(Math.round(n)); }
+function renderVideos(){
+  const el=document.getElementById('vid-list'); if(!el) return;
+  const vids=loadVideos(), meta=videoMeta(), infoEl=document.getElementById('vid-info');
+  if(infoEl && meta && !_syncingVideos){
+    infoEl.innerHTML='<strong>Instagram videos · @'+esc(meta.username||'')+'</strong>'+vids.length+' synced · last sync '+(meta.lastSyncAt?new Date(meta.lastSyncAt).toLocaleString():'—')+(meta.costUsd!=null?' · Apify cost ≈ $'+Number(meta.costUsd).toFixed(3):'')+'. Frame-by-frame AI analysis & repurpose suggestions are the next build.';
+  }
+  if(!vids.length){ el.innerHTML='<p class="empty-msg">No videos synced yet — hit “Sync from Instagram”.</p>'; return; }
+  const last30=vids.filter(v=>v.postedAt && (Date.now()-new Date(v.postedAt).getTime())<30*864e5);
+  const reels=last30.filter(v=>v.type==='reel'||v.type==='video');
+  const totV=reels.reduce((s,v)=>s+(v.views||0),0);
+  const best=vids[0]; // already sorted by views desc
+  let html='<div class="g4 kpi-row" style="margin-bottom:14px;">'
+    +'<div class="card"><div class="kpi-n">'+fmtNum(totV)+'</div><div class="kpi-l">views · last 30d</div></div>'
+    +'<div class="card"><div class="kpi-n">'+reels.length+'</div><div class="kpi-l">reels/videos · 30d</div></div>'
+    +'<div class="card"><div class="kpi-n">'+fmtNum(reels.length?totV/reels.length:0)+'</div><div class="kpi-l">avg views / reel</div></div>'
+    +'<div class="card"><div class="kpi-n">'+fmtNum(best?best.views:0)+'</div><div class="kpi-l">best performer</div></div>'
+    +'</div><div class="vid-grid">';
+  vids.forEach((v,idx)=>{
+    const cap=(v.caption||'').replace(/\s+/g,' ').trim();
+    const thumb = v.thumbnailUrl ? '<div class="vid-thumb" style="background-image:url(\''+escAttr(v.thumbnailUrl)+'\')"></div>' : '<div class="vid-thumb vid-thumb-empty"></div>';
+    html+='<a class="vid-card" href="'+escAttr(v.url||'#')+'" target="_blank" rel="noopener">'+thumb
+      +'<div class="vid-body">'
+      +(idx<3?'<span class="vid-rank">#'+(idx+1)+' by views</span>':'')
+      +'<div class="vid-views">'+fmtNum(v.views)+' <span>views</span></div>'
+      +'<div class="vid-meta">♡ '+fmtNum(v.likes)+' · 💬 '+fmtNum(v.comments)+(v.postedAt?' · '+new Date(v.postedAt).toLocaleDateString():'')+(v.type?' · '+esc(v.type):'')+'</div>'
+      +(cap?'<div class="vid-cap">'+esc(cap.slice(0,90))+(cap.length>90?'…':'')+'</div>':'')
+      +'</div></a>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+let _syncingVideos=false;
+async function syncVideos(){
+  if(_syncingVideos) return;
+  const btn=document.getElementById('vid-sync-btn'), infoEl=document.getElementById('vid-info');
+  const msg=(m)=>{ if(infoEl) infoEl.innerHTML='<strong>Syncing from Instagram…</strong>'+m; };
+  _syncingVideos=true; if(btn){ btn.disabled=true; btn.textContent='Syncing…'; }
+  try{
+    msg('starting Apify…');
+    const sr=await fetch('/api/apify-sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'camiinthisthang',limit:30})});
+    const sj=await sr.json().catch(()=>({}));
+    if(!sj.ok || !sj.runId){ msg('couldn’t start the scrape — '+(sj.error||'unknown error')+(sj.detail?' ('+sj.detail+')':'')); return; }
+    msg('Apify is fetching your posts — usually ~1 minute…');
+    for(let i=1;i<=40;i++){
+      await new Promise(r=>setTimeout(r,4000));
+      const pr=await fetch('/api/apify-sync?runId='+encodeURIComponent(sj.runId)+'&username=camiinthisthang');
+      const pj=await pr.json().catch(()=>({}));
+      if(pj.status==='DONE'){
+        await cloudPullAll();
+        _syncingVideos=false; renderVideos();
+        const m=videoMeta(); if(infoEl) infoEl.innerHTML='<strong>Synced ✓</strong>'+(pj.count||0)+' videos pulled in'+(pj.costUsd!=null?' · Apify cost ≈ $'+Number(pj.costUsd).toFixed(3):'')+'.';
+        return;
+      }
+      if(pj.ok===false && pj.status && pj.status!=='RUNNING' && pj.status!=='READY'){ msg('the Apify run ended as “'+pj.status+'” — try again in a bit.'); return; }
+      msg('Apify is fetching your posts… ('+(i*4)+'s)');
+    }
+    msg('still running after a couple of minutes — give it a moment and reload the page; the videos will show up once it finishes.');
+  }catch(e){ msg('sync failed: '+String(e).slice(0,200)); }
+  finally{ _syncingVideos=false; if(btn){ btn.disabled=false; btn.textContent='Sync from Instagram'; } }
+}
+
 // ── boot ─────────────────────────────────────────────────────────────────────
 async function init(){
   document.getElementById('idea-input').addEventListener('keydown',e=>{if(e.key==='Enter')addIdea();});
   updateDbBadge();
   updateLangToggle();
-  rp(); ri();                                  // paint instantly from the local cache
+  rp(); ri(); renderVideos();                   // paint instantly from the local cache
   if(SUPABASE_ENABLED){
     const changed = await cloudPullAll();
-    if(changed){ if(currentView==='week') rp(); else rm(); ri(); }
+    if(changed){ if(currentView==='week') rp(); else rm(); ri(); renderVideos(); }
     setInterval(syncTick, 20000);
     window.addEventListener('focus', syncTick);
     window.addEventListener('online', syncTick);

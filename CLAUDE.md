@@ -112,7 +112,9 @@ Don't over-build this; it works.
 
 **Auth on the new routes:** they hit Apify/Gemini (cost) — require either a valid session... there's no session here, so: require a header `Authorization: Bearer ${CRON_SECRET}` for the cron-invoked routes, and for the manual buttons either accept the same secret embedded at build time (acceptable for a private tool) or just leave them open since it's a low-traffic private app — decide with Cami. Add `CRON_SECRET` to env.
 
-**Risk:** high — biggest piece, new infra, two new paid APIs, video downloads. Build it incrementally: (a) Apify ingest + `videos` table + a basic performance table first (independently useful), (b) then Gemini analysis, (c) then repurpose radar. Needs from Cami: `APIFY_TOKEN`, her IG handle, `GOOGLE_API_KEY`, `CRON_SECRET`.
+**Status (2026-05-11):** step (a) **shipped** — `api/apify-sync.js` (Vercel fn, async: POST starts an `apify/instagram-scraper` run, GET?runId polls + on SUCCEEDED ingests). Videos are stored in the **`content_plan` k/v table** as `vid_<igPostId>` rows (chose k/v over new tables so nothing extra needs running in Supabase — fine for a small account) plus a `vid_meta` row. New "My videos · performance" section in `index.html` (nav: "My videos"): KPI cards + a video grid sorted by views, "Sync from Instagram" button that orchestrates the start/poll. **Still TODO:** (b) `api/analyze-video.js` — download the video, upload to the Gemini Files API, run the analysis prompt (pillar classification using the hardcoded Pillars definitions, what-worked, follow-up ideas, repurpose formats), store as `vidan_<igPostId>`; surface it in a drawer per video; the suggestions land in a separate "review" area (per the locked decision), not straight into the ideas bank. (c) repurpose radar (35–45-day winners). Watch Gemini cost; cap the `-pro` pass to top N. `CRON_SECRET` still not set (add when wiring a cron).
+
+#### Original notes for #3
 
 ---
 
