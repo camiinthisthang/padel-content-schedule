@@ -121,14 +121,14 @@ Don't over-build this; it works.
 
 ## Still open
 - `APIFY_TOKEN` (re-ask Cami — last paste was mangled)
-- `GOOGLE_API_KEY` for Gemini + a monthly spend ceiling for video analysis
+- A monthly spend ceiling for Gemini video analysis (the `GOOGLE_API_KEY` itself is set). Default if unanswered: `gemini-*-flash` for all videos, the pricier `-pro` pass only on the top ~10 by views.
 - Translation provider + key for Feature 2 (Cami parked it)
 
 ## Required env vars (set in Vercel → Settings → Environment Variables)
 - `SUPABASE_URL`, `SUPABASE_ANON_KEY` — already set ✅
 - `ANTHROPIC_API_KEY` — Feature 2 (if Anthropic chosen) — not set yet
 - `APIFY_TOKEN` — Feature 3 — not set yet
-- `GOOGLE_API_KEY` (Gemini) — Feature 3 — not set yet
+- `GOOGLE_API_KEY` (Gemini) — Feature 3 — ✅ set in Vercel (Production + Development) on 2026-05-11
 - `CRON_SECRET` — Feature 3 cron routes — not set yet
 
 ## Conventions
