@@ -734,6 +734,7 @@ function rp(){
         const d2=lw(getMon(wo));d2[day.key+'_'+si]=ta.value;sw(getMon(wo),d2);
         const ins=e.dataTransfer.getData('application/x-inspo');
         if(ins&&!getInspo(dStr,si)){ setInspo(dStr,si,ins); rp(); }
+        consumeDraggedIdea(e);
       });
       col.appendChild(el);
     });
@@ -818,6 +819,7 @@ function mdayDrop(e){
   if(ta)ta.value=nv;
   const ins=e.dataTransfer.getData('application/x-inspo');
   if(ins&&!getInspo(slot.dataset.date,si)){ setInspo(slot.dataset.date,si,ins); rm(); }
+  consumeDraggedIdea(e);
 }
 
 // ── view toggle ───────────────────────────────────────────────────────────────
@@ -841,6 +843,14 @@ function addIdea(){
   const a=li();a.unshift({text:t,id:Date.now()});si(a);inp.value='';ri();
 }
 function deleteIdea(id){si(li().filter(i=>i.id!==id));ri();}
+// when an idea is dropped onto the calendar it's "used" — drop it from the bank
+function consumeDraggedIdea(e){
+  const idStr=e.dataTransfer.getData('application/x-idea-id');
+  if(!idStr) return;
+  const id=Number(idStr); if(!id) return;
+  const before=li(), after=before.filter(x=>x.id!==id);
+  if(after.length<before.length){ si(after); ri(); }
+}
 function editIdeaInspo(id){
   const a=li(), idea=a.find(x=>x.id===id);
   if(!idea) return;
@@ -865,6 +875,7 @@ function ri(){
     c.querySelector('.idea-inspo-edit').onclick=(e)=>{e.stopPropagation();editIdeaInspo(idea.id);};
     c.addEventListener('dragstart',e=>{
       e.dataTransfer.setData('text/plain',idea.text);
+      e.dataTransfer.setData('application/x-idea-id',String(idea.id));
       if(idea.inspo) e.dataTransfer.setData('application/x-inspo',idea.inspo);
       e.dataTransfer.effectAllowed='copy';
       setTimeout(()=>c.classList.add('dragging'),0);
