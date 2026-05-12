@@ -52,7 +52,8 @@ body {
 .wrap { max-width: 980px; margin: 0 auto; padding: 1.75rem 1.5rem 5rem; }
 
 /* header */
-.top-bar { padding-bottom: 1.1rem; border-bottom: 2px dotted var(--border2); margin-bottom: 1.6rem; }
+.top-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; padding-bottom: 1.1rem; border-bottom: 2px dotted var(--border2); margin-bottom: 1.6rem; }
+.top-bar-text { min-width: 0; flex: 1 1 240px; }
 .top-bar h1 {
   font-family: 'Baloo 2', 'Quicksand', sans-serif; font-size: 26px; font-weight: 800; line-height: 1.15;
   background: linear-gradient(100deg, var(--pink) 0%, var(--lilac) 55%, var(--aqua) 100%);
@@ -257,13 +258,17 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
 .inspo-btn { background:none;border:none;cursor:pointer;font-size:12px;padding:2px 4px;color:var(--text3);line-height:1;border-radius:6px;flex-shrink:0;transition:color .12s,background .12s;text-decoration:none;font-family:inherit; }
 .inspo-btn:hover, .inspo-btn:active { color:var(--gl-text);background:var(--gl-bg); }
 .inspo-btn.has-inspo { color:var(--gl-text); }
-.idea-ref { font-size:11.5px;font-weight:700;line-height:1;border-radius:999px;padding:3px 9px;cursor:pointer;font-family:inherit;text-decoration:none;white-space:nowrap; }
-.idea-ref.ref-empty { background:transparent;color:var(--gl-text);border:1.5px dashed var(--gl-mid); }
-.idea-ref.ref-empty:hover, .idea-ref.ref-empty:active { background:var(--gl-bg);border-style:solid; }
+.idea-ref { font-size:11.5px;font-weight:700;line-height:1;border-radius:999px;padding:3px 10px;cursor:pointer;font-family:inherit;text-decoration:none;white-space:nowrap; }
+.idea-ref.ref-empty, .idea-ref.ref-edit { background:transparent;color:var(--gl-text);border:1.5px dashed var(--gl-mid); }
+.idea-ref.ref-empty:hover, .idea-ref.ref-empty:active, .idea-ref.ref-edit:hover, .idea-ref.ref-edit:active { background:var(--gl-bg);border-style:solid; }
 .idea-ref.ref-set { background:var(--gl-mid);color:var(--gl-text);border:1.5px solid transparent; }
 .idea-ref.ref-set:hover { filter:brightness(.94); }
-.idea-ref-edit { background:none;border:none;cursor:pointer;color:var(--text3);font-size:12px;padding:0 2px;line-height:1;font-family:inherit; }
-.idea-ref-edit:hover, .idea-ref-edit:active { color:var(--gl-text); }
+
+/* language toggle (header) */
+.lang-toggle { display:flex;gap:3px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:999px;padding:3px;flex-shrink:0;box-shadow:var(--shadow-sm); }
+.lt-btn { padding:5px 14px;border-radius:999px;font-size:12.5px;font-weight:700;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:background .12s,color .12s; }
+.lt-btn.active { background:linear-gradient(130deg,var(--pink),var(--lilac));color:#fff;box-shadow:var(--shadow-sm); }
+.lt-busy { font-size:11px;color:var(--text3);font-style:italic;align-self:center;margin-left:4px; }
 
 /* script modal */
 .modal-overlay { display:none;position:fixed;inset:0;background:rgba(60,30,60,.42);backdrop-filter:blur(3px);z-index:1000;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0; }
@@ -342,8 +347,8 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
   .ideas-list { gap: 8px; }
   .idea-chip { font-size: 14.5px; padding: 9px 14px; gap: 9px; }
   .idea-del { font-size: 19px; padding: 2px 4px; }
-  .idea-ref { font-size: 13px; padding: 5px 11px; }
-  .idea-ref-edit { font-size: 15px; padding: 3px 5px; }
+  .idea-ref { font-size: 13.5px; padding: 6px 12px; }
+  .lt-btn { padding: 7px 16px; font-size: 13.5px; }
 
   .script-btn, .inspo-btn { font-size: 15px; padding: 5px 7px; }
   .btn { padding: 11px 20px; font-size: 14.5px; }
@@ -374,8 +379,15 @@ window.__ENV__ = {
 <div class="wrap">
 
 <div class="top-bar">
-  <h1>Cami Padel — Content Strategy</h1>
-  <p>May – September 2026 · Instagram + YouTube · Advanced posting schedule</p>
+  <div class="top-bar-text">
+    <h1>Cami Padel — Content Strategy</h1>
+    <p>May – September 2026 · Instagram + YouTube · Advanced posting schedule</p>
+  </div>
+  <div class="lang-toggle" title="Show idea text in English or Spanish">
+    <button class="lt-btn" id="lt-en" onclick="setLang('en')">EN</button>
+    <button class="lt-btn" id="lt-es" onclick="setLang('es')">ES</button>
+    <span class="lt-busy" id="lt-busy" style="display:none;">traduciendo…</span>
+  </div>
 </div>
 
 <nav class="nav">
@@ -962,17 +974,19 @@ function ri(){
   l.innerHTML='';
   a.forEach(idea=>{
     const c=document.createElement('div');c.className='idea-chip';c.draggable=true;
-    let inner='<span class="idea-text">'+esc(idea.text)+'</span>';
+    const shown=displayText(idea.text);
+    const titleAttr=(uiLang==='es'&&shown!==idea.text)?(' title="'+escAttr(idea.text)+'"'):'';
+    let inner='<span class="idea-text"'+titleAttr+'>'+esc(shown)+'</span>';
     if(idea.inspo){
       inner+='<a class="idea-ref ref-set" draggable="false" href="'+escAttr(idea.inspo)+'" target="_blank" rel="noopener" title="Open the reference video: '+escAttr(idea.inspo)+'">🎬 ref</a>';
-      inner+='<button class="idea-ref-edit" title="Change or remove the reference video">✎</button>';
+      inner+='<button class="idea-ref ref-edit" title="Change or remove the reference video">✎ edit</button>';
     }else{
       inner+='<button class="idea-ref ref-empty" title="Link a reference video for this idea">🔗 add ref</button>';
     }
     inner+='<button class="idea-del" title="Delete idea">×</button>';
     c.innerHTML=inner;
     c.querySelector('.idea-del').onclick=(e)=>{e.stopPropagation();deleteIdea(idea.id);};
-    const refBtn=c.querySelector('.ref-empty')||c.querySelector('.idea-ref-edit');
+    const refBtn=c.querySelector('.ref-empty')||c.querySelector('.ref-edit');
     if(refBtn) refBtn.onclick=(e)=>{e.stopPropagation();editIdeaInspo(idea.id);};
     c.addEventListener('dragstart',e=>{
       e.dataTransfer.setData('text/plain',idea.text);
@@ -984,6 +998,7 @@ function ri(){
     c.addEventListener('dragend',()=>c.classList.remove('dragging'));
     l.appendChild(c);
   });
+  ensureTranslations();
 }
 function exportIdeas(){
   const a=li();
@@ -999,6 +1014,68 @@ function exportIdeas(){
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function escAttr(s){ return String(s).replace(/[<>"'&]/g,c=>({'<':'%3C','>':'%3E','"':'%22',"'":'%27','&':'&amp;'}[c])); }
 function normUrl(u){ u=(u||'').trim(); if(!u) return ''; if(!/^https?:\/\//i.test(u)) u='https://'+u.replace(/^\/+/,''); return u; }
+
+// ── language / Spanish translation for the editors ───────────────────────────
+// uiLang is per-browser (the editor flips it once). Idea text already in Spanish
+// is shown as-is; English ideas are translated via /api/translate (Claude Haiku)
+// and the result is cached in the `tr` k/v key (synced to Supabase, so the
+// editor never waits twice and we don't re-pay). If the API isn't reachable,
+// it just falls back to showing the English — nothing breaks.
+let uiLang = (typeof localStorage!=='undefined' && localStorage.getItem('ui_lang')==='es') ? 'es' : 'en';
+function getTrCache(){ try{ return JSON.parse(localStorage.getItem('tr'))||{}; }catch{ return {}; } }
+function saveTrCache(o){ lset('tr', JSON.stringify(o)); }
+const ES_WORDS=new Set(['el','la','los','las','un','una','de','del','que','qué','cómo','como','porque','para','por','con','mi','tu','su','sus','esto','esta','este','estoy','está','estan','están','soy','eres','somos','jugar','juego','cuando','cuándo','donde','dónde','más','mas','sin','pero','también','tambien','años','año','día','días','dias','gente','vida','hacer','siento','dejé','deje','rendirme','contra','señores','senores','aceptaste','entenderán','entenderan','verdaderas','atletas','saben','aquí','aqui','así','asi','vieja','quiero']);
+const EN_WORDS=new Set(['the','and','with','my','your','how','what','why','this','that','im','trying','when','where','about','here','there','made','spent','paid','worth','first','months','month','days','day','going','been','nobody','talks','talk','workout','recovery','dream','salary','coaching','closet','tour','versus','someone','elses','your','crazy','private','training','before','after','what','spend']);
+function _tok(t){ return String(t||'').toLowerCase().match(/[a-záéíóúñü']+/gi)||[]; }
+function detectLang(t){
+  const s=String(t||''); if(!s.trim()) return 'en';
+  if(/[ñ¿¡]/.test(s)) return 'es';
+  const tk=_tok(s); let es=0,en=0;
+  tk.forEach(w=>{ if(ES_WORDS.has(w))es++; if(EN_WORDS.has(w))en++; });
+  if(es!==en) return es>en?'es':'en';
+  return /[áéíóúü]/.test(s)?'es':'en';
+}
+function displayText(t){
+  if(uiLang!=='es' || !t) return t;
+  if(detectLang(t)==='es') return t;
+  return getTrCache()[t] || t;   // original until the translation arrives
+}
+function updateLangToggle(){
+  const en=document.getElementById('lt-en'), es=document.getElementById('lt-es');
+  if(en) en.classList.toggle('active', uiLang==='en');
+  if(es) es.classList.toggle('active', uiLang==='es');
+}
+function setLang(l){
+  uiLang = (l==='es') ? 'es' : 'en';
+  try{ localStorage.setItem('ui_lang', uiLang); }catch{}
+  updateLangToggle();
+  if(currentView==='week') rp(); else rm();
+  ri();
+  ensureTranslations();
+}
+let _translating=false, _translateDisabled=false;
+function _txBusy(on){ const b=document.getElementById('lt-busy'); if(b) b.style.display=on?'inline':'none'; }
+async function ensureTranslations(){
+  if(uiLang!=='es' || _translating || _translateDisabled) return;
+  const tr=getTrCache();
+  const need=[...new Set(li().map(i=>i.text).filter(Boolean))].filter(t=>detectLang(t)!=='es' && !(t in tr));
+  if(!need.length) return;
+  _translating=true; _txBusy(true);
+  try{
+    const r=await fetch('/api/translate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texts:need})});
+    let j={}; try{ j=await r.json(); }catch{}
+    if(Array.isArray(j.translations)){
+      const cache=getTrCache();
+      need.forEach((t,i)=>{ const v=j.translations[i]; cache[t]=(typeof v==='string'&&v.trim())?v.trim():t; });
+      saveTrCache(cache);
+      ri();
+    }else{
+      _translateDisabled=true;   // endpoint not ready / no key — stop hammering it this session
+      console.warn('translate unavailable; staying in English', r.status, j);
+    }
+  }catch(e){ _translateDisabled=true; console.warn('translate request failed — showing English', e); }
+  finally{ _translating=false; _txBusy(false); }
+}
 
 // ── inspiration-video links (per calendar slot: insp_<date>_<slot>) ──────────
 function getInspo(dateStr,si){ return localStorage.getItem('insp_'+dateStr+'_'+si)||''; }
@@ -1040,7 +1117,7 @@ function openScript(dateStr,si){
     pill.textContent=sl.fmt; pill.style.background=mid; pill.style.color=tc;
   }
   document.getElementById('modal-date-label').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  document.getElementById('modal-idea').textContent=idea||'(no idea written yet — type one in the calendar first)';
+  document.getElementById('modal-idea').textContent=displayText(idea)||'(no idea written yet — type one in the calendar first)';
   document.getElementById('modal-script').value=getScript(dateStr,si);
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(()=>document.getElementById('modal-script').focus(),60);
@@ -1225,6 +1302,7 @@ function updateDbBadge(){
 async function init(){
   document.getElementById('idea-input').addEventListener('keydown',e=>{if(e.key==='Enter')addIdea();});
   updateDbBadge();
+  updateLangToggle();
   rp(); ri();                                  // paint instantly from the local cache
   if(SUPABASE_ENABLED){
     const changed = await cloudPullAll();

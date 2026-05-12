@@ -63,7 +63,10 @@ The per-slot script modal already exists: the ✍️ / 📝 button on each week/
 - Optional: a "this week's scripts" list view so an editor sees everything to write in one place.
 Don't over-build this; it works.
 
-### Feature 2 — Spanish for the editors
+### Feature 2 — Spanish for the editors  ✅ v1 DONE (2026-05-11)
+**Shipped:** `EN | ES` toggle in the header; `detectLang()` heuristic (ñ/¿/¡ + ES/EN stopword counts); in ES mode the **ideas-bank chips** and the **script-modal idea line** render Spanish — already-Spanish text is left as-is, English text is translated by `POST /api/translate` (Vercel serverless fn → Claude `claude-haiku-4-5`, batched) and cached in the `tr` k/v key (synced to Supabase, so it's translated once). Degrades to English silently if the endpoint/key is unavailable (`_translateDisabled`). **v2 TODO:** also translate the planner slot textareas (show a Spanish caption under each, since the textarea itself stays editable in English) and the month-view slots; a "re-translate" action; consider letting Cami edit a bad machine translation.
+
+#### Original notes
 **Goal:** the editors mostly read Spanish. Every reel idea should be readable in Spanish for them, without making Cami (who types some in English, some already in Spanish) do double work.
 
 **Key facts:**
