@@ -306,8 +306,9 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
 .vid-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:12px; }
 .vid-card { display:flex;flex-direction:column;border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--bg2);box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;transition:transform .12s,border-color .12s; }
 .vid-card:hover { border-color:var(--border2);transform:translateY(-2px); }
-.vid-thumb { width:100%;aspect-ratio:1/1;background-size:cover;background-position:center;background-color:var(--bg3); }
-.vid-thumb-empty::after { content:"🎬";display:flex;align-items:center;justify-content:center;height:100%;font-size:28px;opacity:.4; }
+.vid-thumb { display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--bg3);color:transparent; }
+.vid-thumb-empty { display:flex;align-items:center;justify-content:center;font-size:28px; }
+.vid-thumb-empty::after { content:"🎬";opacity:.4; }
 .vid-body { padding:9px 11px; }
 .vid-views { font-family:'Baloo 2','Quicksand',sans-serif;font-size:18px;font-weight:800;color:var(--pink-deep);line-height:1.1; }
 .vid-views span { font-size:11px;font-weight:600;color:var(--text2);font-family:'Quicksand',sans-serif; }
@@ -1329,6 +1330,7 @@ function updateDbBadge(){
 }
 
 // ── my videos / performance (Apify pull; Gemini analysis is the next build) ──
+function thumbFail(img){ try{ img.outerHTML='<div class="vid-thumb vid-thumb-empty"></div>'; }catch{} }
 function loadVideos(){
   const out=[];
   for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith('vid_') && k!=='vid_meta'){ try{ const v=JSON.parse(localStorage.getItem(k)); if(v&&v.igPostId) out.push(v); }catch{} } }
@@ -1356,7 +1358,9 @@ function renderVideos(){
     +'</div><div class="vid-grid">';
   vids.forEach((v,idx)=>{
     const cap=(v.caption||'').replace(/\s+/g,' ').trim();
-    const thumb = v.thumbnailUrl ? '<div class="vid-thumb" style="background-image:url(\''+escAttr(v.thumbnailUrl)+'\')"></div>' : '<div class="vid-thumb vid-thumb-empty"></div>';
+    const thumb = v.thumbnailUrl
+      ? '<img class="vid-thumb" loading="lazy" alt="" src="/api/thumb?u='+encodeURIComponent(v.thumbnailUrl)+'" onerror="thumbFail(this)">'
+      : '<div class="vid-thumb vid-thumb-empty"></div>';
     html+='<a class="vid-card" href="'+escAttr(v.url||'#')+'" target="_blank" rel="noopener">'+thumb
       +'<div class="vid-body">'
       +(idx<3?'<span class="vid-rank">#'+(idx+1)+' by views</span>':'')
