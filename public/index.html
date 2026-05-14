@@ -323,6 +323,23 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
 .vid-cap { font-size:11.5px;color:var(--text);line-height:1.4; }
 .vid-rank { font-size:9.5px;font-weight:800;color:#fff;background:linear-gradient(130deg,var(--pink),var(--lilac));border-radius:999px;padding:1.5px 7px;display:inline-block;margin-bottom:3px; }
 
+/* ===== EDITOR BONUS ===== */
+.bonus-rule { font-size:11.5px;color:var(--text2);padding:9px 12px;background:var(--bg3);border:1.5px dashed var(--border2);border-radius:var(--rs);margin-bottom:12px;line-height:1.55; }
+.bonus-rows { display:flex;flex-direction:column;gap:8px; }
+.bonus-row { display:flex;align-items:center;gap:12px;padding:10px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--bg2);text-decoration:none;color:inherit;box-shadow:var(--shadow-sm);transition:border-color .12s,transform .12s; }
+.bonus-row:hover { border-color:var(--border2);transform:translateY(-1px); }
+.bonus-row.qualified { border-left:4px solid var(--pink); }
+.bonus-thumb { width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--bg3);flex-shrink:0;display:block; }
+.bonus-thumb.vid-thumb-empty { font-size:22px; }
+.bonus-mid { flex:1;min-width:0; }
+.bonus-cap { font-size:13px;color:var(--text);font-weight:600;line-height:1.35;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+.bonus-meta { font-size:11px;color:var(--text2);font-weight:500;display:flex;flex-wrap:wrap;gap:5px 10px;align-items:center; }
+.bonus-amt { font-family:'Baloo 2','Quicksand',sans-serif;font-size:20px;font-weight:800;color:var(--pink-deep);min-width:72px;text-align:right;flex-shrink:0; }
+.bonus-amt.zero { color:var(--text3);font-weight:600;font-size:14px; }
+.bonus-status { font-size:10.5px;font-weight:700;padding:1.5px 8px;border-radius:999px;display:inline-block; }
+.bonus-status.final { background:var(--ae-mid);color:var(--ae-text); }
+.bonus-status.pending { background:var(--j-mid);color:var(--j-text); }
+
 /* =========================================================
    MOBILE — the primary device. Stack the grids, fatten the
    tap targets, 16px inputs so iOS doesn't zoom on focus.
@@ -340,6 +357,10 @@ section { margin-bottom: 3.25rem; scroll-margin-top: 58px; }
   .g4.kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
   .vid-grid { grid-template-columns: 1fr 1fr; gap: 9px; }
   .vid-body { padding: 8px 9px; }
+  .bonus-row { gap: 10px; padding: 9px; }
+  .bonus-thumb { width: 48px; height: 48px; }
+  .bonus-amt { font-size: 17px; min-width: 60px; }
+  .bonus-cap { font-size: 13px; -webkit-line-clamp: 2; }
   .gf { flex-direction: column; }
   .split, .fmt-grid { grid-template-columns: 1fr; }
   .split-good { border-left: none; border-top: 1.5px solid var(--border); }
@@ -424,6 +445,7 @@ window.__ENV__ = {
   <a href="#schedule" class="np">Weekly schedule</a>
   <a href="#planner" class="np">Planner</a>
   <a href="#performance" class="np">My videos</a>
+  <a href="#bonus" class="np">Editor bonus</a>
   <a href="#plan" class="np">Phase plan</a>
 </nav>
 
@@ -729,6 +751,13 @@ window.__ENV__ = {
     <button class="btn btn-sm" id="vid-sync-btn" onclick="syncVideos()">Sync from Instagram</button>
   </div>
   <div id="vid-list"></div>
+</section>
+
+<!-- EDITOR BONUS -->
+<section id="bonus">
+  <p class="sec-label">Editor bonus · $1 per 1,000 views over 10,000 · 15-day window</p>
+  <div id="bonus-summary"></div>
+  <div id="bonus-list"></div>
 </section>
 
 <!-- PHASE PLAN -->
@@ -1334,7 +1363,7 @@ async function cloudPullAll(){
 async function syncTick(){
   const changed = await cloudPullAll();
   if(!changed) return;
-  renderVideos();   // no inputs in here — safe to repaint even mid-edit elsewhere
+  renderVideos(); renderBonus();   // no inputs in here — safe to repaint even mid-edit elsewhere
   const ae = document.activeElement;
   if(ae && (ae.tagName==='TEXTAREA' || ae.tagName==='INPUT')) return;   // don't yank focus mid-edit; picks up next tick
   if(currentView==='week') rp(); else rm();
@@ -1399,6 +1428,75 @@ function renderVideos(){
   html+='</div>';
   el.innerHTML=html;
 }
+// ── editor bonus: $1 per 1,000 views over 10,000, window of 15 days post-publish
+const BONUS_BASE_VIEWS = 10000;
+const BONUS_RATE_CENTS_PER_1000 = 100;       // $1 per 1,000 views over the base
+const BONUS_WINDOW_DAYS = 15;
+function computeBonusCents(views){ return Math.max(0, Math.floor(((views||0) - BONUS_BASE_VIEWS) / 1000)) * BONUS_RATE_CENTS_PER_1000; }
+function money(cents){ const neg=cents<0; const c=Math.abs(cents); return (neg?'-':'')+'$'+(Math.floor(c/100))+'.'+String(c%100).padStart(2,'0'); }
+function renderBonus(){
+  const sumEl=document.getElementById('bonus-summary'), listEl=document.getElementById('bonus-list');
+  if(!sumEl || !listEl) return;
+  const vids=loadVideos();
+  if(!vids.length){
+    sumEl.innerHTML='';
+    listEl.innerHTML='<p class="empty-msg">No videos synced yet — go to <a href="#performance" style="color:var(--pink-deep);">My videos</a> and hit “Sync from Instagram” first.</p>';
+    return;
+  }
+  const now=Date.now();
+  const byDate=vids.slice().sort((a,b)=>{
+    const ta=a.postedAt?new Date(a.postedAt).getTime():0, tb=b.postedAt?new Date(b.postedAt).getTime():0;
+    return tb-ta;
+  });
+  let finalCents=0, pendingCents=0, qFinal=0, qPending=0;
+  const rows=byDate.map(v=>{
+    const posted=v.postedAt?new Date(v.postedAt):null;
+    const days=posted?Math.floor((now-posted.getTime())/86400000):null;
+    const isFinal=days!==null && days>=BONUS_WINDOW_DAYS;
+    const freezeOn=posted?new Date(posted.getTime()+BONUS_WINDOW_DAYS*86400000):null;
+    const bonus=computeBonusCents(v.views||0);
+    if(bonus>0){ if(isFinal){ finalCents+=bonus; qFinal++; } else { pendingCents+=bonus; qPending++; } }
+    return {v, days, isFinal, freezeOn, bonus};
+  });
+  const totalCents=finalCents+pendingCents;
+
+  sumEl.innerHTML='<div class="g4 kpi-row" style="margin-bottom:14px;">'
+    + '<div class="card"><div class="kpi-n">'+money(totalCents)+'</div><div class="kpi-l">total accruing</div></div>'
+    + '<div class="card"><div class="kpi-n">'+money(finalCents)+'</div><div class="kpi-l">final · past 15-day window</div></div>'
+    + '<div class="card"><div class="kpi-n">'+money(pendingCents)+'</div><div class="kpi-l">pending · still in window</div></div>'
+    + '<div class="card"><div class="kpi-n">'+(qFinal+qPending)+'</div><div class="kpi-l">videos qualified</div></div>'
+    + '</div>';
+
+  let html='<div class="bonus-rule"><strong>Rule:</strong> $1 for every 1,000 views above 10,000 per video, counted up to 15 days after the post date. <em>Note:</em> we use the current view count as the @15d view count — we don\'t store daily snapshots yet, so videos that kept growing past day 15 might slightly overstate. Hit “Sync from Instagram” to refresh.</div>';
+  html+='<div class="bonus-rows">';
+  rows.forEach(({v, days, isFinal, freezeOn, bonus})=>{
+    const cap=(v.caption||'').replace(/\s+/g,' ').trim();
+    const thumb = v.thumbnailUrl
+      ? '<img class="bonus-thumb" loading="lazy" alt="" src="/api/thumb?u='+encodeURIComponent(v.thumbnailUrl)+'" onerror="thumbFail(this)">'
+      : '<div class="bonus-thumb vid-thumb-empty"></div>';
+    const status = isFinal
+      ? '<span class="bonus-status final">✓ final</span>'
+      : (freezeOn ? '<span class="bonus-status pending">⏳ pending · freezes '+freezeOn.toLocaleDateString()+'</span>' : '');
+    const cls = bonus>0 ? 'bonus-row qualified' : 'bonus-row';
+    const amtCls = bonus>0 ? 'bonus-amt' : 'bonus-amt zero';
+    html+='<a class="'+cls+'" href="'+escAttr(v.url||'#')+'" target="_blank" rel="noopener">'
+      + thumb
+      + '<div class="bonus-mid">'
+        + '<div class="bonus-cap">'+esc(cap.slice(0,110))+(cap.length>110?'…':'')+'</div>'
+        + '<div class="bonus-meta">'
+          + '<span>'+fmtNum(v.views)+' views</span>'
+          + '<span>'+(days!==null?days+'d ago':'—')+'</span>'
+          + (bonus>0?'<span>over base: '+fmtNum(Math.max(0,(v.views||0)-BONUS_BASE_VIEWS))+'</span>':'<span>under 10k base</span>')
+          + (status?'<span>'+status+'</span>':'')
+        + '</div>'
+      + '</div>'
+      + '<div class="'+amtCls+'">'+money(bonus)+'</div>'
+      + '</a>';
+  });
+  html+='</div>';
+  listEl.innerHTML=html;
+}
+
 let _syncingVideos=false;
 async function syncVideos(){
   if(_syncingVideos) return;
@@ -1407,7 +1505,7 @@ async function syncVideos(){
   _syncingVideos=true; if(btn){ btn.disabled=true; btn.textContent='Syncing…'; }
   try{
     msg('starting Apify…');
-    const sr=await fetch('/api/apify-sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'camiinthisthang',limit:30})});
+    const sr=await fetch('/api/apify-sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'camiinthisthang',limit:120})});
     const sj=await sr.json().catch(()=>({}));
     if(!sj.ok || !sj.runId){ msg('couldn’t start the scrape — '+(sj.error||'unknown error')+(sj.detail?' ('+sj.detail+')':'')); return; }
     msg('Apify is fetching your posts — usually ~1 minute…');
@@ -1417,7 +1515,7 @@ async function syncVideos(){
       const pj=await pr.json().catch(()=>({}));
       if(pj.status==='DONE'){
         await cloudPullAll();
-        _syncingVideos=false; renderVideos();
+        _syncingVideos=false; renderVideos(); renderBonus();
         const m=videoMeta(); if(infoEl) infoEl.innerHTML='<strong>Synced ✓</strong>'+(pj.count||0)+' videos pulled in'+(pj.costUsd!=null?' · Apify cost ≈ $'+Number(pj.costUsd).toFixed(3):'')+'.';
         return;
       }
@@ -1434,10 +1532,10 @@ async function init(){
   document.getElementById('idea-input').addEventListener('keydown',e=>{if(e.key==='Enter')addIdea();});
   updateDbBadge();
   updateLangToggle();
-  rp(); ri(); renderVideos();                   // paint instantly from the local cache
+  rp(); ri(); renderVideos(); renderBonus();    // paint instantly from the local cache
   if(SUPABASE_ENABLED){
     const changed = await cloudPullAll();
-    if(changed){ if(currentView==='week') rp(); else rm(); ri(); renderVideos(); }
+    if(changed){ if(currentView==='week') rp(); else rm(); ri(); renderVideos(); renderBonus(); }
     setInterval(syncTick, 20000);
     window.addEventListener('focus', syncTick);
     window.addEventListener('online', syncTick);

@@ -62,8 +62,8 @@ module.exports = async function handler(req, res) {
       let body = req.body;
       if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
       const username = ((body && body.username) || DEFAULT_USER).replace(/[^A-Za-z0-9._]/g, '');
-      let limit = parseInt((body && body.limit) || 30, 10); if (!Number.isFinite(limit)) limit = 30;
-      limit = Math.min(Math.max(limit, 6), 60);
+      let limit = parseInt((body && body.limit) || 100, 10); if (!Number.isFinite(limit)) limit = 100;
+      limit = Math.min(Math.max(limit, 6), 250);
       const r = await fetch('https://api.apify.com/v2/acts/' + ACTOR + '/runs?token=' + encodeURIComponent(APIFY), {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
